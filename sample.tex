@@ -1,0 +1,288 @@
+\documentclass[master]{thesis}
+
+% fonts
+% use times font by default but can specify other font
+%\usepackage{fourier} % fourier looks nice
+
+%\usepackage[scaled]{helvet} % OR these two lines give a sans-serif font
+%\renewcommand\familydefault{\sfdefault} 
+
+% for including the lipsum text
+% can be removed in final document
+\usepackage{lipsum}
+
+% ams math packages
+\usepackage[cmex10]{amsmath}
+\usepackage{amsthm,amssymb}
+
+% graphics packages
+\usepackage{graphicx}
+%\usepackage[pdftex]{graphicx} % if you use pdflatex
+
+% put figures in subdirectory called figures
+%\graphicspath{{./figures/}}
+
+% allowed graphics extensions
+% if you uncomment this you don't have to add the extension in \includegraphics
+%\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+% book tables are simple and look nice
+\usepackage{booktabs}
+
+% for specifying urls and links
+\usepackage{url}
+\urlstyle{same}
+%\usepackage[colorlinks=false,pdfborder={0 0 0}]{hyperref} % make links clickable
+
+% Title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% title of your thesis
+\title{Colorado State University \LaTeX{} Thesis Template}
+
+% the authors name
+\author{John M. Doe}
+
+% author's email address
+\email{youremail@colostate.edu}
+
+% semester of completion
+\semester{Spring 2015}
+
+% committee member names
+\advisor{Advisor Name}
+\coadvisor{Co-Adivisor Name} % optional
+\committee{First Member} % as many as you need
+\committee{Second Member}
+\committee{Third Member}
+
+% Copyright
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Here is an example of student copyright declaration
+% note that the \copyright command prints the copyright symbol,
+% so we use \mycopyright instead
+\mycopyright{%
+Copyright by John M. Doe 20\_\_ \\
+All Rights reserved
+}
+
+% Here is an example of a creative commons copyright license
+%\mycopyright{%
+%This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 United States License.
+%
+%\vspace{3em}
+%
+%To view a copy of this license, visit:
+%
+%\vspace{2em}
+%
+%\url{http://creativecommons.org/licenses/by-nc-nd/3.0/legalcode}
+%
+%\vspace{3em}
+%
+%Or send a letter to:
+%
+%\vspace{2em}
+%
+%Creative Commons
+%
+%171 Second Street, Suite 300
+%
+%San Francisco, California, 94105, USA.
+%}
+
+% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\abstract{%
+Your abstract goes here.
+}
+
+% Acknowledgments 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\acknowledgements{%
+Your acknowledgements go here.
+}
+
+\begin{document} % preamble is complete, add any custom packages above
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frontmatter % starts preliminary pages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\maketitle
+\makemycopyright
+\makeabstract
+\makeacknowledgements
+\tableofcontents
+\listoftables
+\listoffigures
+
+% any extra preliminary pages can be added here
+% below is an example of a dedication page
+\begin{center}
+    \phantomsection
+    \addcontentsline{toc}{chapter}{Dedication}
+
+    DEDICATION
+
+    %\vspace{3em} % place at top
+    \vfill % or center on page
+    \noindent \textit{I would like to dedicate this thesis to my dog fluffy.}
+    \vfill
+\end{center}
+\newpage
+
+\mainmatter % starts thesis body
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chap:intro} % chapter and section labels are optional
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Your thesis text goes here.  You can reference \cref{chap:intro} like this.
+
+\section{Section}
+\label{sec:intro:section}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Here is a sample section.  You can reference \sref{sec:intro:section} like this.
+
+\subsection{Subsection A}
+\label{sec:intro:section:subsection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Here is a sample sub-section.  You can reference \sref{sec:intro:section:subsection} like this.
+
+\subsection{Subsection B}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Tables and figures.}
+\label{chap:tables.and.figs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
+    %\includegraphics[width=0.75\textwidth]{image_file_name}
+    PLACE SAMPLE GRAPHIC HERE
+    \caption{Sample figure.  Caption goes below the figure.}
+    \label{fig:sample}
+\end{figure}
+
+We can reference \fref{fig:sample} like this.
+
+\begin{table*}[hp]
+    \caption{Sample table.  Caption goes above the table.}
+    \label{table:sample}
+    \begin{center}
+        \begin{tabular}{@{}*{4}{l}} % four columns, left justified
+            \toprule
+            Data-A  & Data-B    & Data-C    & Data-D \\
+            \midrule
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            \midrule
+            Mean    & 0.5       & 0.5       & 0.5   \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{table*}
+
+We can reference \tref{table:sample} like this.
+
+\chapter{More Text}
+\label{chap:more}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lipsum[1-10]
+
+\begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
+    %\includegraphics[width=0.75\textwidth]{image_file_name}
+    PLACE SAMPLE GRAPHIC HERE
+    \caption{Sample figure.  Caption goes below the figure.}
+    \label{fig:sample}
+\end{figure}
+\begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
+    %\includegraphics[width=0.75\textwidth]{image_file_name}
+    PLACE SAMPLE GRAPHIC HERE
+    \caption{Sample figure.  Caption goes below the figure.}
+    \label{fig:sample}
+\end{figure}
+
+
+\begin{table*}[hp]
+    \caption{Sample table.  Caption goes above the table.}
+    \label{table:sample}
+    \begin{center}
+        \begin{tabular}{@{}*{4}{l}} % four columns, left justified
+            \toprule
+            Data-A  & Data-B    & Data-C    & Data-D \\
+            \midrule
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            \midrule
+            Mean    & 0.5       & 0.5       & 0.5   \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{table*}
+\begin{table*}[hp]
+    \caption{Sample table.  Caption goes above the table.}
+    \label{table:sample}
+    \begin{center}
+        \begin{tabular}{@{}*{4}{l}} % four columns, left justified
+            \toprule
+            Data-A  & Data-B    & Data-C    & Data-D \\
+            \midrule
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            0.5     & 0.5       & 0.5       & 0.5   \\
+            \midrule
+            Mean    & 0.5       & 0.5       & 0.5   \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\end{table*}
+
+Let's cite a bunch of things \cite{forney20112749, cebl, forney2011thesis, forney2015echostate, haykin2009neural}.
+
+\appendix % starts the appendices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Extra Stuff}
+\label{appendix:extra}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Hello world!
+
+\backmatter % starts unnumbered supplementary material
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\phantomsection
+\addcontentsline{toc}{chapter}{References}
+
+% unsorted BibTeX style
+% consider using natbib package to change BibTeX format
+\bibliographystyle{unsrt}
+\bibliography{sample}
+
+\end{document}
