@@ -410,16 +410,17 @@
 % Table of Contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% use tocloft to customize table of contents, et cetra
+\ifCLASSOPTIONsubfigure
+    % needed subfigure for compatibility
+    % note that subfig should generally be used instead of subfigure
+    \RequirePackage[subfigure,titles]{tocloft}
+\else
+    \RequirePackage[titles]{tocloft} % use tocloft package to modify toc
+\fi
+
 % customize table of contents in notdense layout
 \ifCLASSOPTIONnotdense
-    \ifCLASSOPTIONsubfigure
-        % needed subfigure for compatibility
-        % note that subfig should generally be used instead of subfigure
-        \RequirePackage[subfigure,titles]{tocloft}
-    \else
-        \RequirePackage[titles]{tocloft} % use tocloft package to modify toc
-    \fi
-
     % don't indent before chapters or sections
     \setlength{\cftchapindent}{0in}
     \setlength{\cftsecindent}{0in}

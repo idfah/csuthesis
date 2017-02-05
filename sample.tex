@@ -1,4 +1,4 @@
-\documentclass[master]{thesis}
+\documentclass[master,dense]{thesis}
 
 % fonts
 % use times font by default but can specify other font
@@ -40,7 +40,7 @@
 % title of your thesis
 \title{Colorado State University \LaTeX{} Thesis Template}
 
-% the authors name
+% the author's name
 \author{John M. Doe}
 
 % author's email address
@@ -207,19 +207,19 @@ We can reference \tref{table:sample} like this.
     %\includegraphics[width=0.75\textwidth]{image_file_name}
     PLACE SAMPLE GRAPHIC HERE
     \caption{Sample figure.  Caption goes below the figure.}
-    \label{fig:sample}
+    \label{fig:sample2}
 \end{figure}
 \begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
     %\includegraphics[width=0.75\textwidth]{image_file_name}
     PLACE SAMPLE GRAPHIC HERE
     \caption{Sample figure.  Caption goes below the figure.}
-    \label{fig:sample}
+    \label{fig:sample3}
 \end{figure}
 
 
 \begin{table*}[hp]
     \caption{Sample table.  Caption goes above the table.}
-    \label{table:sample}
+    \label{table:sample2}
     \begin{center}
         \begin{tabular}{@{}*{4}{l}} % four columns, left justified
             \toprule
@@ -239,9 +239,10 @@ We can reference \tref{table:sample} like this.
         \end{tabular}
     \end{center}
 \end{table*}
+
 \begin{table*}[hp]
     \caption{Sample table.  Caption goes above the table.}
-    \label{table:sample}
+    \label{table:sample3}
     \begin{center}
         \begin{tabular}{@{}*{4}{l}} % four columns, left justified
             \toprule
