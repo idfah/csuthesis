@@ -33,7 +33,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % provide a new document class
-\ProvidesClass{thesis}[2017/01/20 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/02/10 Colorado State University Thesis]
 
 % provide classoption for dense, single-spaced layout
 % this is useful for printing, proofreading and distribution
@@ -84,27 +84,17 @@
 % configure page size and margins
 \RequirePackage{geometry}
 \ifCLASSOPTIONnotdense
-    \geometry{verbose,
-              letterpaper, % letter paper
-              includefoot, % room for footers
+    \geometry{verbose, letterpaper, heightrounded,
               lmargin=1in, rmargin=1in, % 1in margins
               tmargin=1in, bmargin=1in}
-
-% smaller margins for dense layout
 \else
-    \geometry{verbose,
-              letterpaper, % letter paper
-              includefoot, % room for footers
+    \geometry{verbose, letterpaper, includefoot,
               lmargin=0.75in, rmargin=0.75in,
               tmargin=0.75in, bmargin=0.75in}
 \fi
 
 % use plain page style with page number at bottom
 \pagestyle{plain}
-
-% this makes the typesetting rules less strict
-% helps prevent hbox overflow and such
-%\sloppy
 
 % use double spacing unless using dense layout
 \ifCLASSOPTIONdense
@@ -113,42 +103,62 @@
     \RequirePackage[doublespacing]{setspace}
 \fi
 
-% hook to center all floats, e.g, tables and figures
+% hook to add \centering to all float environments,
+% e.g, tables and figures
 \g@addto@macro\@floatboxreset\centering
 
 % titlesec is used to modify chapter and section headings
 \RequirePackage{titlesec}
 
-% set up fonts and spacing around the chapter headings
-\titleformat{\chapter}[display]
-    {\normalfont\bfseries\Huge}
-    {\chaptertitlename\ \ \thechapter}{0em}{\bfseries\Huge}
-    %{\chaptertitlename\ \ \thechapter}{0em}{\bfseries}
-    %{\chaptertitlename\ \ \thechapter:}{1em}{\bfseries\Large}
-    %{\MakeUppercase{\chaptertitlename}\ \ \thechapter:}{1em}{\bfseries\uppercase}
-\titlespacing*{\chapter}{0em}{-2.5em}{1.5em}
-%\titlespacing*{\chapter}{0em}{0em}{0.5em}
+% space above chapter heading
+\newlength\@abovechap
+\setlength\@abovechap{-50pt}
 
-%%\ifCLASSOPTIONnotdense
-%%    % set up fonts and spacing around the section headings
-%%    %%\titleformat{\section}
-%%    %%    {\normalfont\bfseries}
-%%    %%    {\thesection}{1em}{\bfseries}
-%%    %\titlespacing*{\section}{0em}{0em}{\baselineskip}
-%%    \titlespacing*{\section}{0em}{\baselineskip}{0em}
-%%
-%%    % set up fonts and spacing around the subsection headings
-%%    %%\titleformat{\subsection}
-%%    %%    {\normalfont\bfseries}
-%%    %%    {\thesection}{1em}{\bfseries}
-%%    \titlespacing*{\subsection}{0em}{\baselineskip}{0em}
-%%
-%%    % set up fonts and spacing around the subsubsection headings
-%%    %%\titleformat{\subsubsection}
-%%    %%    {\normalfont\bfseries}
-%%    %%    {\thesection}{1em}{\bfseries}
-%%    \titlespacing*{\subsubsection}{0em}{\baselineskip}{0em}
-%%\fi
+% space below chapter heading
+\newlength\@belowchap
+\setlength\@belowchap{\lineskip}
+\addtolength{\@belowchap}{1em}
+
+% space above section heading
+\newlength\@abovesec
+\setlength\@abovesec{\lineskip}
+\addtolength{\@abovesec}{1em}
+
+% space below section heading
+\newlength\@belowsec
+\setlength\@belowsec{\lineskip}
+
+% font sizes for chapter/section/subsection headings
+\newcommand{\@chapsize}{\LARGE}
+\newcommand{\@secsize}{\Large}
+\newcommand{\@subsecsize}{\Large}
+\newcommand{\@subsubsecsize}{\Large}
+
+%%% set up fonts and spacing around the chapter headings
+\titleformat{\chapter}[display]
+%\titleformat{\chapter}
+    {\normalfont\bfseries\@chapsize}
+    {\chaptertitlename\ \ \thechapter}{0em}{\bfseries\@chapsize}
+    %{\chaptertitlename\ \ \thechapter:}{1em}{\bfseries\@chapsize}
+\titlespacing*{\chapter}{0em}{\@abovechap}{\@belowchap}
+
+% set up fonts and spacing around the section headings
+\titleformat{\section}
+    {\normalfont\bfseries\@secsize}
+    {\thesection}{1em}{\bfseries\@secsize}
+\titlespacing*{\section}{0em}{\@abovesec}{\@belowsec}
+
+% set up fonts and spacing around the subsection headings
+\titleformat{\subsection}
+    {\normalfont\bfseries\@subsecsize}
+    {\thesection}{1em}{\bfseries\@subsecsize}
+\titlespacing*{\subsection}{0em}{\@abovesec}{\@belowsec}
+
+% set up fonts and spacing around the subsubsection headings
+\titleformat{\subsubsection}
+    {\normalfont\bfseries\@subsubsecsize}
+    {\thesection}{1em}{\bfseries\@subsubsecsize}
+\titlespacing*{\subsubsection}{0em}{\@abovesec}{\@belowsec}
 
 % captions
 %\RequirePackage{caption}
@@ -157,8 +167,22 @@
 
 % discourage single lines from being at top or bottom
 % widows are slightly worse than orphans here
-%\clubpenalty=9996 % penalty for breaking after first line of a paragraph
-%\widowpenalty=9999 % penalty for breaking before last line of a paragraph
+%\clubpenalty=9999 % penalty for breaking after first line of a paragraph
+%\widowpenalty=10000 % penalty for breaking before last line of a paragraph
+%\clubpenalty=500 % penalty for breaking after first line of a paragraph
+%\widowpenalty=10000 % penalty for breaking before last line of a paragraph
+\clubpenalty=10000 % penalty for breaking after first line of a paragraph
+\widowpenalty=10000 % penalty for breaking before last line of a paragraph
+\predisplaypenalty=500
+\raggedbottom
+
+% indent first paragraphs
+\let\@afterindentfalse\@afterindenttrue
+\@afterindenttrue
+
+% this makes the typesetting rules less strict
+% helps prevent hbox overflow and such
+%\sloppy
 
 % internal command used to suppress indentation
 \newcommand{\@zeroindent}{\setlength{\parindent}{0in}}
@@ -166,13 +190,21 @@
 % Title Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% command to set department name
-\def\@department{Department of Computer Science}
-\newcommand{\department}[1]{\def\@department{#1}}
+% command to the document title
+\def\@title{Colorado State University \LaTeX{} Thesis Template}
+\renewcommand{\title}[1]{\def\@title{#1}}
+
+% command to set author's name
+\def\@author{John M. Doe}
+\renewcommand{\author}[1]{\def\@author{#1}}
 
 % command to set author's email
 \def\@email{youremail@colostate.edu}
 \newcommand{\email}[1]{\def\@email{#1}}
+
+% command to set department name
+\def\@department{Department of Computer Science}
+\newcommand{\department}[1]{\def\@department{#1}}
 
 % command to set defense semester
 \def\@semester{Fall 20\_\_}
@@ -328,7 +360,8 @@
         \vspace*{\fill}
     \end{center}
 
-    % \thispagestyle{empty} % no page number here
+    \thispagestyle{empty} % no page number here
+    \addtocounter{page}{-1} % and don't count this in page numbering
     \newpage
 }
 
@@ -358,7 +391,7 @@
 
         \vspace{3em}
 
-        \noindent \@abstract \par
+        \@abstract \par
 
         \newpage
     }
@@ -402,7 +435,7 @@
 
     \vspace{3em}
 
-    \noindent \@acknowledgements \par
+    \@acknowledgements \par
 
     \newpage
 }
@@ -443,7 +476,11 @@
     \renewcommand{\cftchappagefont}{\normalfont}
     \renewcommand{\cftchapfont}{\normalfont}
 
-    % spacing between lines
+    % don't indent list of figures/tables
+    \setlength{\cftfigindent}{0pt}
+    \setlength{\cfttabindent}{0pt}
+
+    % zero spacing between lines
     %\setlength{\cftbeforechapskip}{0em}
 
     %%% don't leave space above or below title
@@ -456,7 +493,7 @@
 
     % command to create table of contents page
     \renewcommand{\tableofcontents}{%
-        { \singlespace
+        {\singlespace
             \centerline{TABLE OF CONTENTS}
 
             \vspace{3em}
@@ -484,7 +521,7 @@
         %\phantomsection
         %\addcontentsline{toc}{chapter}{List Of Tables}
 
-        { \singlespace
+        {\singlespace
             \centerline{LIST OF TABLES}
 
             \vspace{3em}
@@ -512,7 +549,7 @@
         %\phantomsection
         %\addcontentsline{toc}{chapter}{List Of Figures}
 
-        { \singlespace
+        {\singlespace
 
             \centerline{LIST OF FIGURES}
 
