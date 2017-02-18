@@ -298,8 +298,8 @@
 % command to make copyright page
 \newcommand{\makemycopyright}{%
     % add copyright page to table of contents
-    \phantomsection
-    \addcontentsline{toc}{chapter}{Copyright}
+    %\phantomsection
+    %\addcontentsline{toc}{chapter}{Copyright}
 
     \begin{center}
         \vspace*{\fill}
@@ -406,10 +406,6 @@
 
 % command to create table of contents
 \renewcommand{\tableofcontents}{%
-    % add to table of contents
-    %\phantomsection
-    %\addcontentsline{toc}{chapter}{Table of Contents}
-
     {\singlespace
         \centerline{TABLE OF CONTENTS}
 
@@ -427,10 +423,6 @@
 
 % command to make list of tables
 \renewcommand{\listoftables}{%
-    % add to table of contents
-    %\phantomsection
-    %\addcontentsline{toc}{chapter}{List of Tables}
-
     {\singlespace
         \centerline{LIST OF TABLES}
 
@@ -448,10 +440,6 @@
 
 % command to make list of figures
 \renewcommand{\listoffigures}{%
-    % add to table of contents
-    %\phantomsection
-    %\addcontentsline{toc}{chapter}{List of Figures}
-
     {\singlespace
 
         \centerline{LIST OF FIGURES}
