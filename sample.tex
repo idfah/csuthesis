@@ -1,14 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colorado State University LaTeX Thesis Template and Documentation
+%
+% by
+%   Elliott Forney
+%
+% This is free and unencumbered software released into the public domain.
+% 
+% Anyone is free to copy, modify, publish, use, compile, sell, or
+% distribute this software, either in source code form or as a compiled
+% binary, for any purpose, commercial or non-commercial, and by any
+% means.
+% 
+% In jurisdictions that recognize copyright laws, the author or authors
+% of this software dedicate any and all copyright interest in the
+% software to the public domain. We make this dedication for the benefit
+% of the public at large and to the detriment of our heirs and
+% successors. We intend this dedication to be an overt act of
+% relinquishment in perpetuity of all present and future rights to this
+% software under copyright law.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+% EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+% MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+% IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+% OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+% ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+% OTHER DEALINGS IN THE SOFTWARE.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Preamble
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% use the thesis document class
+% this is derived from the standard book class
+% and supports many of the same features
 \documentclass[master]{thesis}
+%\documentclass[doctor]{thesis} % for a dissertation
 
 % fonts
-% use times font by default but can specify other font
-%\usepackage{fourier} % fourier looks nice
+% use times font by default but can specify other fonts
+%\usepackage{fourier} % fourier is also a nice choice
 
-%\usepackage[scaled]{helvet} % OR these two lines give a sans-serif font
+%\usepackage[scaled]{helvet} % or these two lines give a sans-serif font
 %\renewcommand\familydefault{\sfdefault} 
 
-% for including the lipsum text
-% can be removed in final document
+% this is useful for including dummy test
+% it can be removed in final document
 \usepackage{lipsum}
 
 % ams math packages
@@ -16,35 +53,34 @@
 \usepackage{amsthm,amssymb}
 
 % graphics packages
-\usepackage{graphicx}
-%\usepackage[pdftex]{graphicx} % if you use pdflatex
-
-% put figures in subdirectory called figures
-%\graphicspath{{./figures/}}
+\usepackage[pdftex]{graphicx} % remove pdftex if you are not compiling to pdf
+\graphicspath{{./figures/}} % this places all graphics in the figures subdirectory
 
 % allowed graphics extensions
-% if you uncomment this you don't have to add the extension in \includegraphics
-%\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+% uncomment if you prefer to add extension in \includegraphics
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+% allows the creation of subfigures
+\usepackage[caption=false]{subfig}
 
 % book tables are simple and look nice
 \usepackage{booktabs}
 
 % for specifying urls and links
 \usepackage{url}
-\urlstyle{same}
-%\usepackage[colorlinks=false,pdfborder={0 0 0}]{hyperref} % make links clickable
+\urlstyle{same} % same style as regular text
 
-% Title
+% Title Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % title of your thesis
-\title{Colorado State University \LaTeX{} Thesis Template}
+\title{Colorado State University LaTeX Thesis Template}
 
-% the author's name
+% author's name
 \author{John M. Doe}
 
 % author's email address
-\email{youremail@colostate.edu}
+\email{youremail@whereever.com}
 
 % department name
 \department{Department of Computer Science}
@@ -54,23 +90,24 @@
 
 % committee member names
 \advisor{Advisor Name}
-\coadvisor{Co-Adivisor Name} % optional
-\committee{First Member} % as many as you need
+\coadvisor{Co-Adivisor Name} % co-advisor is optional
+\committee{First Member} % as many committee entries as you need
 \committee{Second Member}
 \committee{Third Member}
 
-% Copyright
+% Copyright Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Here is an example of student copyright declaration
+% here is an example of student copyright declaration
 % note that the \copyright command prints the copyright symbol,
-% so we use \mycopyright instead
+% so we use the name \mycopyright instead
 \mycopyright{%
 Copyright by John M. Doe 20\_\_ \\
 All Rights reserved
 }
 
-% Here is an example of a creative commons copyright license
+% here is an example of a creative commons copyright license
+% ask the graduate school for more information
 %\mycopyright{%
 %This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 United States License.
 %
@@ -99,17 +136,24 @@ All Rights reserved
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \abstract{%
-Your abstract goes here.
+This document aims to get you started typesetting your thesis or dissertation in \LaTeX{}.  It serves both as a sample and as the documentation for this package.  You may replace this text with your abstract.
 }
 
 % Acknowledgments 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \acknowledgements{%
-Your acknowledgements go here.
+We would like to thank the CSU Graduate Student Council for iniaiting and funding the creation of this project and to the CSU Graduate School for their assistance and feedback.  Thank you to CSU for being awsome and to Elliott Forney for creating the initial version of this template.  You may replace this text with your acknowledgements.
 }
 
-\begin{document} % preamble is complete, add any custom packages above
+% Metadata
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% use hyperref to insert pdf metadata and make links clickable
+% safe to remove if not using pdf or if it causes problems
+\usepackage[pdfpagelabels,pdfusetitle,colorlinks=false,pdfborder={0 0 0}]{hyperref}
+
+\begin{document} % preamble is complete, add custom packages above
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frontmatter % starts preliminary pages
@@ -120,8 +164,8 @@ Your acknowledgements go here.
 \makeabstract
 \makeacknowledgements
 \tableofcontents
-\listoftables
-\listoffigures
+\listoftables % optional
+\listoffigures % optional
 
 % any extra preliminary pages can be added here
 % below is an example of a dedication page
@@ -142,38 +186,115 @@ Your acknowledgements go here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Introduction}
-\label{chap:intro} % chapter and section labels are optional
+\label{chap:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Your thesis text goes here.  You can reference \cref{chap:intro} like this.
+Thank you for downloading the Colorado State University (CSU) \LaTeX{} document class and template for theses and dissertations.  The goal of this document is to get you started writing and typesetting your thesis in \LaTeX{}.  This document serves both as a guide for using this package and as a sample template to get you started.  After reading over this guide, please see the source code for this file to get started.
 
-\section{Section}
-\label{sec:intro:section}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Please note that while this package was sponsored by the CSU Graduate Student Council and by the CSU Graduate School, it is not officially supported by CSU.  Instead, it is intended that this document will be supported by its community of users and by the students themselves, that's you!  This document is currently hosted on GitHub at \url{http://www.github.com/idfah/csuthesis}.  If you have a patch or improvement that you would like included, please submit a pull request on GitHub.  For information on the official guidelines for formatting your thesis, please visit the CSU electronic thesis and dissertation resources page at \url{http://graduateschool.colostate.edu/for-current-students/completing-your-degree/thesis-dissertation/}.
 
-Here is a sample section.  You can reference \sref{sec:intro:section} like this.
+Also, note that this package is free, public domain software.  See the header of the source code for the full copyright license.  You are free to modify, distribute and fork this software in any that you would like.
 
-\subsection{Subsection A}
-\label{sec:intro:section:subsection}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{The Thesis Document Class}
 
-Here is a sample sub-section.  You can reference \sref{sec:intro:section:subsection} like this.
+This package includes a \LaTeX{} document class called \textit{thesis.cls}, which extends the standard \textit{book.cls} that is included with most \LaTeX{} distributions.  Most of the features that work in \textit{book.cls} will also work in \textit{thesis.cls}; however, the setup of the title and other preliminary pages and various aspects of the document's formatting have been modified.  Also, \textit{thesis.cls} provides a few extra commands that may be useful.
 
-\subsection{Subsection B}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Required Packages}
 
-\chapter{Tables and figures.}
-\label{chap:tables.and.figs}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Document Class Options}
 
-\begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
-    %\includegraphics[width=0.75\textwidth]{image_file_name}
-    PLACE SAMPLE GRAPHIC HERE
-    \caption{Sample figure.  Caption goes below the figure.}
-    \label{fig:sample}
+The \textit{thesis.cls} document class also provides a number of options that can be specified when the class is loaded.  The following class options are supported:
+
+\begin{itemize}
+    \item \textbf{bachelor}  This sets the formatting style to be suitable for an undergraduate Honor's Thesis.
+    \item \textbf{master}  This sets the formatting style to be appropriate for a graduate Master's Thesis.
+    \item \textbf{doctor}  This sets the formatting style to be appropriate for a graduate PhD Dissertation.
+    \item \textbf{nopdf}  This prevents the use of features that are specific to pdf output formats.  Specify this option if you are using a different format, such as PostScript or DVI.
+    \item \textbf{subfigure}  This enables compatibility with the \textit{subfigure} package.  Note that \textit{subfigure} is now depreciated in favor of the \textit{subfig} package, which is supported by default.
+\end{itemize}
+
+In addition to the above options, \textit{thesis.cls} supports all of the options supported by \textit{book.cls}.  We recommend, however, that you double check the Graduate School's formatting guidelines before changing any of the options from \textit{book.cls}.
+
+\section{Preliminary Pages}
+
+A number of commands are provided by \textit{thesis.cls} to create the various preliminary pages that must be included in your thesis, e.g, title page, copyright page, abstract, table of contents, et cetra.  The following commands provide information to \textit{thesis.cls} about the contents of your preliminary pages and should be specified before \verb|\begin{document}|.
+
+\begin{itemize}
+    \item \textbf{\textbackslash title}  This command takes a single argument giving the title of your thesis.
+    \item \textbf{\textbackslash author}  This command takes a single argument giving the name of the author.
+    \item \textbf{\textbackslash email}  This command takes a single argument giving the author's email address.
+    \item \textbf{\textbackslash department}  This command takes a single argument giving the name of the author's department, e.g., Department of Computer Science.
+    \item \textbf{\textbackslash semester}  This command takes a single argument giving the semester during which the thesis will be defended, e.g., Summer 2017.
+    \item \textbf{\textbackslash advisor}  This command takes a single argument giving the name of the author's advisor, do not include Dr. or Professor.
+    \item \textbf{\textbackslash coadvisor}  This is an optional command that takes a single argument specifying the author's co-advisor.  Omit this command if you don't have a co-advisor.
+    \item \textbf{\textbackslash committee}  This command takes a single argument giving the name of a member of the author's committee.  Use this command repeatedly to specify additional committee members.
+    \item \textbf{\textbackslash mycopyright}  This command takes a single argument giving the text to display on the copyright page.  Ask the graduate school for more information on choosing the copyright that is right for you.
+    \item \textbf{\textbackslash abstract}  This command takes a single argument giving the text to display on the abstract page.
+    \item \textbf{\textbackslash acknowledgements}  This command takes a single argument giving the text to display on the acknowledgements page.
+\end{itemize}
+
+After you have finished your preamble and specified \verb|\begin{document}|, the following commands can be used to actually insert each preliminary page:
+
+\begin{itemize}
+    \item \textbf{\textbackslash maketitle}  Makes the title page.
+    \item \textbf{\textbackslash makemycopyright}  Makes the copyright page.
+    \item \textbf{\textbackslash makeabstract}  Makes the abstract page.
+    \item \textbf{\textbackslash makeacknowledgements}  Makes the acknowledgements page.
+    \item \textbf{\textbackslash tableofcontents}  Makes the table of contents.
+    \item \textbf{\textbackslash listoftables}  Makes the list of tables (optional).
+    \item \textbf{\textbackslash listoffigures}  Makes the list of figures (optional).
+\end{itemize}
+
+The source code of this document also provides an example of how to add your own preliminary pages, such as a dedication or list of symbols.
+
+\section{Front, Main, Back and Appendix Regions}
+
+Please note that \textit{thesis.cls} requires you to denote the various regions of your document using the same conventions as \textit{book.cls}.  The following command denote the beginning of each corresponding region:
+
+\begin{itemize}
+    \item \textbf{\textbackslash frontmatter}  This command denotes the beginning of the preliminary pages, such as the title page, copyright page, table of contents, et cetra.
+    \item \textbf{\textbackslash mainmatter}  This command denotes the beginning of the main thesis text.  This is where you will write the bulk of your thesis.
+    \item \textbf{\textbackslash appendix}  This command denotes the beginning of any appendices that you may wish to add.  Appendices are created just like chapters but are labeled differently.
+    \item \textbf{\textbackslash backmatter}  This command denotes the beginning of unnumbered supplementary material.  Notably, this includes your bibliography.
+\end{itemize}
+
+\chapter{Figures, Tables and Floats, Oh My!}
+
+\section{Figures}
+
+\begin{figure}[htp]
+    \includegraphics[width=0.45\textwidth]{pso}
+    \caption{A particle swarm optimizing the Rosenbrock banana function.}
+    \label{fig:pso}
 \end{figure}
 
-We can reference \fref{fig:sample} like this.
+
+\subsection{Subfigures}
+
+% if LaTeX (or the margin in your figure file) leads to extra space at
+% the top of the page, you may have to reverse the space with something
+% like this.  change the -1 to whatever gets you a 1in margin.
+% the graduate school is very picky about top margins and sometimes
+% vspace is the only solution
+\vspace{-1em} 
+\begin{figure}[p!]
+    \subfloat[The Rosenbrock banana function.]{\label{fig:rosen:banana}\includegraphics[width=0.45\textwidth]{banana}} \hfill
+    \subfloat[Path of the particles.]{\label{fig:rosen:pso}\includegraphics[width=0.45\textwidth]{pso}}
+    \caption{Using PSO to optimize the Rosenbrock banana function.  (a)  The function to optimize.  (b)  The path of the particles as they find the global minima.}
+\end{figure}
+
+\section{Sideways Pages}
+
+\begin{sidewayspage} % if your figures are too big to fig, things will break
+    \vspace{-1em}
+    \begin{figure} % don't put [p] here!!
+        \subfloat[The Rosenbrock banana function.]{\label{fig:rosen:banana}\includegraphics[width=4in]{banana}} \hfill
+        \subfloat[Path of the particles.]{\label{fig:rosen:pso}\includegraphics[width=4in]{pso}}
+        \caption{Using PSO to optimize the Rosenbrock banana function.  (a)  The function to optimize.  (b)  The path of the particles as they find the global minima.}
+    \end{figure}
+\end{sidewayspage}
+
+\section{Tables}
 
 \begin{table*}[hp]
     \caption{Sample table.  Caption goes above the table.}
@@ -200,92 +321,45 @@ We can reference \fref{fig:sample} like this.
 
 We can reference \tref{table:sample} like this.
 
-\chapter{More Text}
-\label{chap:more}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equations}
 
-\lipsum[1-10]
+Equations are the same as they are in most other \LaTeX{} documents.  For example,
+\begin{equation}
+    \mathbf{z}(t) = \phi(\mathbf{H} \bar{\mathbf{x}}(t) + \mathbf{S} \mathbf{z}(t-1)),
+    \label{eq:somefunc}
+\end{equation}
+where $\mathbf{z}(t)$ is the output of some function at time $t$.  We typically refer to equations as something like \eqref{eq:somefunc}.
 
-\begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
-    %\includegraphics[width=0.75\textwidth]{image_file_name}
-    PLACE SAMPLE GRAPHIC HERE
-    \caption{Sample figure.  Caption goes below the figure.}
-    \label{fig:sample2}
-\end{figure}
-\begin{figure}[hp] % hp tries to place figure "here" first and on its own "page" next
-    %\includegraphics[width=0.75\textwidth]{image_file_name}
-    PLACE SAMPLE GRAPHIC HERE
-    \caption{Sample figure.  Caption goes below the figure.}
-    \label{fig:sample3}
-\end{figure}
+\chapter{References}
 
+\section{Citation}
 
-\begin{table*}[hp]
-    \caption{Sample table.  Caption goes above the table.}
-    \label{table:sample2}
-    \begin{center}
-        \begin{tabular}{@{}*{4}{l}} % four columns, left justified
-            \toprule
-            Data-A  & Data-B    & Data-C    & Data-D \\
-            \midrule
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            \midrule
-            Mean    & 0.5       & 0.5       & 0.5   \\
-            \bottomrule
-        \end{tabular}
-    \end{center}
-\end{table*}
+\section{Footnotes}
 
-\begin{table*}[hp]
-    \caption{Sample table.  Caption goes above the table.}
-    \label{table:sample3}
-    \begin{center}
-        \begin{tabular}{@{}*{4}{l}} % four columns, left justified
-            \toprule
-            Data-A  & Data-B    & Data-C    & Data-D \\
-            \midrule
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            0.5     & 0.5       & 0.5       & 0.5   \\
-            \midrule
-            Mean    & 0.5       & 0.5       & 0.5   \\
-            \bottomrule
-        \end{tabular}
-    \end{center}
-\end{table*}
+\section{Bibliography}
 
 Let's cite a bunch of things \cite{forney20112749, cebl, forney2011thesis, forney2015echostate, haykin2009neural}.
+
+\chapter{Formatting Tips and Tricks}
 
 \appendix % starts the appendices
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Extra Stuff}
-\label{appendix:extra}
+\chapter{A Bunch of Cryptic Text}
+\label{appendix:cryptic}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Hello world!
+\lipsum
 
 \backmatter % starts unnumbered supplementary material
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% References
+% Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % unsorted BibTeX style
 % check here for more:  https://www.sharelatex.com/learn/Bibtex_bibliography_styles
 \bibliographystyle{unsrt}
-\bibliography{sample}
+\bibliography{sample} % change readme to the name of your .tex file
 
 % Have a nice day!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

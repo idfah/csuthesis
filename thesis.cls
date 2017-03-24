@@ -3,7 +3,6 @@
 %
 % by
 %   Elliott Forney
-%   elliott.forney@gmail.com
 %
 % This is free and unencumbered software released into the public domain.
 % 
@@ -32,23 +31,28 @@
 % Document class definition
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% provide a new document class
-\ProvidesClass{thesis}[2017/02/17 Colorado State University Thesis]
+% provide a new LaTeX2e document class
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{thesis}[2017/02/24 Colorado State University Thesis]
 
-% provide classoption to specify if this is an honor, master or
+% provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
-\newif\ifCLASSOPTIONhonor
+\newif\ifCLASSOPTIONbachelor
 \newif\ifCLASSOPTIONmaster
 \newif\ifCLASSOPTIONdoctor
-\DeclareOption{honor}{\CLASSOPTIONhonortrue \CLASSOPTIONmasterfalse \CLASSOPTIONdoctorfalse}
-\DeclareOption{master}{\CLASSOPTIONhonorfalse \CLASSOPTIONmastertrue \CLASSOPTIONdoctorfalse}
-\DeclareOption{doctor}{\CLASSOPTIONhonorfalse \CLASSOPTIONmasterfalse \CLASSOPTIONdoctortrue}
+\DeclareOption{bachelor}{\CLASSOPTIONbachelortrue \CLASSOPTIONmasterfalse \CLASSOPTIONdoctorfalse}
+\DeclareOption{master}{\CLASSOPTIONbachelorfalse  \CLASSOPTIONmastertrue  \CLASSOPTIONdoctorfalse}
+\DeclareOption{doctor}{\CLASSOPTIONbachelorfalse  \CLASSOPTIONmasterfalse \CLASSOPTIONdoctortrue}
 
 % provide classoption for subfigure compatibility
 % note that the subfig package should generally be used instead
 % of subfigure, so this option shouldn't be necessary unless you insist
 \newif\ifCLASSOPTIONsubfigure \CLASSOPTIONsubfigurefalse
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
+
+% disable features that are specific to pdf output
+\newif\ifCLASSOPTIONpdf \CLASSOPTIONpdftrue
+\DeclareOption{nopdf}{\CLASSOPTIONpdffalse}
 
 % some default options for the book class
 \PassOptionsToClass{oneside,openany,letterpaper,12pt}{book}
@@ -65,14 +69,8 @@
 % book class is used as a base
 \LoadClass{book}
 
-% Formatting and style
+% Page formatting and layout
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% fonts
-\RequirePackage[T1]{fontenc}
-\RequirePackage{times}
-%\RequirePackage{fourier}
-%\RequirePackage{mathptmx}
 
 % configure page size and margins
 \RequirePackage{geometry}
@@ -80,21 +78,40 @@
           lmargin=1in, rmargin=1in, % 1in margins
           tmargin=1in, bmargin=1in, footskip=0.5in}
 
+% use double spacing by default
+\RequirePackage[doublespacing]{setspace}
+
+% Fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% use times font by default
+\RequirePackage[T1]{fontenc}
+\RequirePackage{times}
+
+% Footnotes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % remove rule above footnote and places further down page
-\RequirePackage[norule,bottom]{footmisc}
+\RequirePackage[flushmargin,bottom]{footmisc}
 
 % space between footnotes if there are multiple on one page
 \setlength{\footnotesep}{1.5em}
+
+% setup hrule above footnotes with little space between text
+\def\footnoterule{\hrule \@width 2in}
 
 % prevents footnote counter from resetting at new chapter
 \RequirePackage{remreset}
 \@removefromreset{footnote}{chapter}
 
+% Page numbers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % use plain page style with page number at bottom
 \pagestyle{plain}
 
-% use double spacing by default
-\RequirePackage[doublespacing]{setspace}
+% Float (figures, tables, etc) formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % hook to add \centering to all float environments,
 % e.g, tables and figures
@@ -108,27 +125,79 @@
 \setlength{\@fpsep}{1em}            % between on float only pages
 \setlength{\@fpbot}{0em plus 1fil}  % bottom of float only pages
 
-% titlesec is used to modify chapter and section headings
-\RequirePackage{titlesec}
+% make captions use small font with bold label
+\RequirePackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Table of contents formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% use tocloft to customize table of contents, list of figures, etc
+\ifCLASSOPTIONsubfigure
+    % needed subfigure for compatibility
+    % note that subfig should generally be used instead of subfigure
+    \RequirePackage[subfigure,titles]{tocloft}
+\else
+    \RequirePackage[titles]{tocloft} % use tocloft package to modify toc
+\fi
+
+% indentation before chapters or sections
+\setlength{\cftchapindent}{0in}
+\setlength{\cftsecindent}{0.1in}
+\setlength{\cftsubsecindent}{0.2in}
+\setlength{\cftsubsubsecindent}{0.3in}
+
+% same spaces between section numbers and names
+\setlength{\cftchapnumwidth}{4em}
+\setlength{\cftsecnumwidth}{4em}
+\setlength{\cftsubsecnumwidth}{4em}
+\setlength{\cftsubsubsecnumwidth}{4em}
+
+% dots same for chapters and sections
+\renewcommand{\cftchapdotsep}{\cftdotsep}
+
+% dots not bold
+\renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}}
+
+% use normal fonts, not bold
+\renewcommand{\cftchappagefont}{\normalfont}
+\renewcommand{\cftchapfont}{\normalfont}
+
+% don't indent list of figures/tables
+\setlength{\cftfigindent}{0pt}
+\setlength{\cfttabindent}{0pt}
+
+% create a table-of-contents entry for a new preliminary page
+% we call it an unnumbered section so they aren't spaced and
+% reverse the indent using hspace then make uppercase
+\newcommand{\prelimtocentry}[1]{%
+    \phantomsection%
+    \addcontentsline{toc}{section}{\hspace{-\cftsecindent}\uppercase{#1}}%
+}
+
+% Chapter and section headings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % adjust spacing around chapter/section headings
-\def\@abovechap{-30pt}              % above chapter headings
-\def\@belowchap{1em plus \lineskip} % below chapter headings
-\def\@abovesec{1em plus \lineskip}  % above section headings
-\def\@belowsec{\lineskip}           % below section headings
+\def\@abovechap{-25pt}  % above chapter headings
+\def\@belowchap{0.8em}    % below chapter headings
+\def\@abovesec{1em}     % above section headings
+\def\@belowsec{0.3em}   % below section headings
+% note: abovesec does not affect section headings at top of page!
 
 % font sizes for chapter, section and subsection headings
-\newcommand{\@chapsize}{\LARGE}
-\newcommand{\@secsize}{\Large}
-\newcommand{\@subsecsize}{\Large}
-\newcommand{\@subsubsecsize}{\Large}
+\newcommand{\@chapsize}{\Large}
+\newcommand{\@secsize}{\large}
+\newcommand{\@subsecsize}{\normalsize}
+\newcommand{\@subsubsecsize}{\normalsize}
+
+% titlesec is used to customize chapter and section headings
+\RequirePackage{titlesec}
 
 % set up fonts and spacing around the chapter headings
 \titleformat{\chapter}[display] % display argument yields two-line heading
     {\normalfont\bfseries\@chapsize}
     {\chaptertitlename\ \ \thechapter}{0em}{\bfseries\@chapsize}
-    % this could be used for one-line heading
-    %{\chaptertitlename\ \ \thechapter:}{1em}{\bfseries\@chapsize}
 \titlespacing*{\chapter}{0em}{\@abovechap}{\@belowchap}
 
 % set up fonts and spacing around the section headings
@@ -149,9 +218,8 @@
     {\thesection}{1em}{\bfseries\@subsubsecsize}
 \titlespacing*{\subsubsection}{0em}{\@abovesec}{\@belowsec}
 
-% make captions use small font with bold label
-\RequirePackage{caption}
-\captionsetup{font=small,labelfont=bf}
+% Typesetting rules
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % discourage single lines of a paragraph from landing at the
 % bottom or top of page, a.k.a, widows and orphans
@@ -171,49 +239,87 @@
 \let\@afterindentfalse\@afterindenttrue
 \@afterindenttrue
 
-% internal command used to suppress indentation
-\newcommand{\@zeroindent}{\setlength{\parindent}{0in}}
+% command to suppress indentation
+\newcommand{\zeroindent}{\setlength{\parindent}{0in}}
+
+% command to create centered environment with no
+% indentation and without extra space above or below
+\newenvironment{flatcenter}{\centering \zeroindent}{\par}
+
+% provide an environment for creating landscape pages
+% for big tables and figures
+% this is kind of a hack for now
+\ifCLASSOPTIONpdf
+    \RequirePackage{pdflscape}
+\else
+    \RequirePackage{lscape}
+\fi
+\newenvironment{sidewayspage}
+{%
+    \newgeometry{verbose, letterpaper, heightrounded,
+                 lmargin=1in, rmargin=0.45in,
+                 tmargin=1in, bmargin=1in}%
+    \begin{landscape}%
+    \thispagestyle{empty}%
+}{%
+        \null%
+        \vfill%
+        \centerline{\normalsize\thepage}%
+\end{landscape}%
+\restoregeometry%
+}
+
+% Citation and reference formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% define custom commands for creating references
+% for tables, figures, equations and such
+\RequirePackage{cite}
+\newcommand{\eref}[1]{\eqref{#1}}       % cite equation
+\newcommand{\fref}[1]{Figure~\ref{#1}}  % cite figure
+\newcommand{\cref}[1]{Chapter~\ref{#1}} % cite chapter
+\newcommand{\sref}[1]{Section~\ref{#1}} % cite section/sub(sub)section
+\newcommand{\tref}[1]{Table~\ref{#1}}   % cite table
 
 % Title Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % command to the document title
 \def\@title{Colorado State University \LaTeX{} Thesis Template}
-\renewcommand{\title}[1]{\def\@title{#1}}
+\renewcommand{\title}[1]{\protected@edef\@title{#1}}
 
 % command to set author's name
 \def\@author{John M. Doe}
-\renewcommand{\author}[1]{\def\@author{#1}}
+\renewcommand{\author}[1]{\protected@edef\@author{#1}}
 
 % command to set author's email
 \def\@email{youremail@colostate.edu}
-\newcommand{\email}[1]{\def\@email{#1}}
+\newcommand{\email}[1]{\protected@edef\@email{#1}}
 
 % command to set department name
 \def\@department{Department of Computer Science}
-\newcommand{\department}[1]{\def\@department{#1}}
+\newcommand{\department}[1]{\protected@edef\@department{#1}}
 
 % command to set defense semester
 \def\@semester{Fall 20\_\_}
-\newcommand{\semester}[1]{\def\@semester{#1}}
+\newcommand{\semester}[1]{\protected@edef\@semester{#1}}
 
 % command to set advisor's name
 \def\@advisor{Advisor's Name}
-\newcommand{\advisor}[1]{\def\@advisor{#1}}
+\newcommand{\advisor}[1]{\protected@edef\@advisor{#1}}
 
 % command to set (optional) co-advisor's name
-\newcommand{\coadvisor}[1]{\def\@coadvisor{#1}}
+\newcommand{\coadvisor}[1]{\protected@edef\@coadvisor{#1}}
 
 % command to add committee members
 % this tacks new members onto current value of \@committee
 \def\@committee{}
-\newcommand{\committee}[1]{\edef\@committee{%
-    \unexpanded\expandafter{\@committee} \noexpand\hspace{0.25in} #1 \par}}
+\newcommand{\committee}[1]{\protected@edef\@committee{%
+    \unexpanded\expandafter{\@committee}{\noexpand\hspace{0.25in} #1 \par}}}
 
 % command to make title page
 \renewcommand{\maketitle}{%
-    {\@zeroindent
-        \begin{center}
+    \begin{flatcenter}
             % doctorate is dissertation, otherwise its a thesis
             \ifCLASSOPTIONdoctor
                 DISSERTATION
@@ -238,15 +344,15 @@
 
             In partial fulfillment of the requirements
 
-            % for honor, master or doctor
-            \ifCLASSOPTIONhonor
-                for the Degree of Bachelor of Science with Honors
+            % for bachelor, master or doctor
+            \ifCLASSOPTIONbachelor
+                For the Degree of Bachelor of Science
             \fi
             \ifCLASSOPTIONmaster
-                for the Degree of Master of Science
+                For the Degree of Master of Science
             \fi
             \ifCLASSOPTIONdoctor
-                for the Degree of Doctor of Philosophy
+                For the Degree of Doctor of Philosophy
             \fi
 
             Colorado State University
@@ -254,32 +360,31 @@
             Fort Collins, Colorado
 
             \@semester
+    \end{flatcenter}
 
-            \vspace*{\fill}
-        \end{center}
+    \vspace*{\fill}
 
-        {\singlespace \@zeroindent
-            \ifCLASSOPTIONhonor
-              Committee:
-            \fi
-            \ifCLASSOPTIONmaster
-              Master's Committee:
-            \fi
-            \ifCLASSOPTIONdoctor
-              Doctoral Committee:
-            \fi
+    {\singlespace \zeroindent
+        \ifCLASSOPTIONbachelor
+          Committee:
+        \fi
+        \ifCLASSOPTIONmaster
+          Master's Committee:
+        \fi
+        \ifCLASSOPTIONdoctor
+          Doctoral Committee:
+        \fi
 
-            \vspace{1em}
-            \hspace{0.25in} Advisor: \@advisor \par
+        \vspace{1em}
+        \hspace{0.25in} Advisor: \@advisor \par
 
-            % unpack committee members
-            \ifx\@coadvisor\undefined \else
-                \hspace{0.25in} Co-Advisor: \@coadvisor
-            \fi
-            \vspace{1em}
+        % unpack committee members
+        \ifx\@coadvisor\undefined \else
+            \hspace{0.25in} Co-Advisor: \@coadvisor \par
+        \fi
+        \vspace{1em}
 
-            \@committee
-        }
+        \@committee
     }
 
     \thispagestyle{empty} % no page number here
@@ -290,26 +395,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % default copyright
-\def\@mycopyright{Copyright by \@author \\ All Rights reserved}
+\def\@mycopyright{Copyright by \@author \\ All Rights Reserved}
 
 % command to set copyright
-\newcommand{\mycopyright}[1]{\def\@mycopyright{#1}}
+\newcommand{\mycopyright}[1]{\protected@edef\@mycopyright{#1}}
 
 % command to make copyright page
 \newcommand{\makemycopyright}{%
-    % add copyright page to table of contents
-    %\phantomsection
-    %\addcontentsline{toc}{chapter}{Copyright}
+    \vspace*{\fill}
+    \begin{flatcenter}
+        \@mycopyright
+    \end{flatcenter}
+    \vspace*{\fill}
 
-    \begin{center}
-        \vspace*{\fill}
-        {\@zeroindent \@mycopyright}
-        \vspace*{\fill}
-    \end{center}
-
-    \thispagestyle{empty} % no page number here
-    \addtocounter{page}{-1} % and don't count this in page numbering
-    \newpage
+    % copyright page has no page number...
+    % literally, no page number at all, SMH
+    \newcounter{@temppage} % store page counter so we can reset it later
+    \setcounter{@temppage}{\value{page}}
+    \thispagestyle{empty} % disable page number display
+    \pagenumbering{gobble} % disable page number counter
+    \newpage % start next page
+    \pagenumbering{roman} % reset page numbering to roman
+    \setcounter{page}{\value{@temppage}} % reset page number counter
 }
 
 % Abstract
@@ -319,23 +426,22 @@
 \def\@abstract{Abstract goes here.}
 
 % command to set abstract
-\newcommand{\abstract}[1]{\def\@abstract{#1}}
+\newcommand{\abstract}[1]{\protected@edef\@abstract{#1}}
 
 % command to make abstract page
 \newcommand{\makeabstract}{%
     % add to table of contents
-    \phantomsection
-    \addcontentsline{toc}{chapter}{Abstract}
+    \prelimtocentry{Abstract}
 
-    \begin{center}
+    \begin{flatcenter}
         ABSTRACT
 
         \vspace{3em}
 
-        {\MakeUppercase{\@title} \par}
-    \end{center}
+        \MakeUppercase{\@title}
 
-    \vspace{3em}
+        \vspace{3em}
+    \end{flatcenter}
 
     \@abstract \par
 
@@ -349,17 +455,18 @@
 \def\@acknowledgements{Acknowledgements go here.}
 
 % command to set acknowledgements
-\newcommand{\acknowledgements}[1]{\def\@acknowledgements{#1}}
+\newcommand{\acknowledgements}[1]{\protected@edef\@acknowledgements{#1}}
 
 % acknowledgements page
 \newcommand{\makeacknowledgements}{%
     % add to table of contents
-    \phantomsection
-    \addcontentsline{toc}{chapter}{Acknowledgements}
+    \prelimtocentry{Acknowledgements}
 
-    \centerline{ACKNOWLEDGEMENTS}
+    \begin{flatcenter}
+        ACKNOWLEDGEMENTS
 
-    \vspace{3em}
+        \vspace{3em}
+    \end{flatcenter}
 
     \@acknowledgements \par
 
@@ -369,51 +476,16 @@
 % Table of Contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% use tocloft to customize table of contents, et cetra
-\ifCLASSOPTIONsubfigure
-    % needed subfigure for compatibility
-    % note that subfig should generally be used instead of subfigure
-    \RequirePackage[subfigure,titles]{tocloft}
-\else
-    \RequirePackage[titles]{tocloft} % use tocloft package to modify toc
-\fi
-
-% don't indent before chapters or sections
-\setlength{\cftchapindent}{0in}
-\setlength{\cftsecindent}{0in}
-\setlength{\cftsubsecindent}{0in}
-\setlength{\cftsubsubsecindent}{0in}
-
-% same spaces between section numbers and names
-\setlength{\cftchapnumwidth}{4em}
-\setlength{\cftsecnumwidth}{4em}
-\setlength{\cftsubsecnumwidth}{4em}
-\setlength{\cftsubsubsecnumwidth}{4em}
-
-% dots same for chapters and sections
-\renewcommand{\cftchapdotsep}{\cftdotsep}
-
-% dots not bold
-\renewcommand{\cftchapleader}{\cftdotfill{\cftsecdotsep}}
-
-% use normal fonts, not bold
-\renewcommand{\cftchappagefont}{\normalfont}
-\renewcommand{\cftchapfont}{\normalfont}
-
-% don't indent list of figures/tables
-\setlength{\cftfigindent}{0pt}
-\setlength{\cfttabindent}{0pt}
-
 % command to create table of contents
 \renewcommand{\tableofcontents}{%
-    {\singlespace
-        \centerline{TABLE OF CONTENTS}
+    \begin{flatcenter}
+        TABLE OF CONTENTS
 
         \vspace{3em}
+    \end{flatcenter}
 
-        % insert table of contents
-        \@starttoc{toc}
-    }
+    % insert table of contents
+    {\singlespace \@starttoc{toc}}
 
     \newpage
 }
@@ -423,14 +495,14 @@
 
 % command to make list of tables
 \renewcommand{\listoftables}{%
-    {\singlespace
-        \centerline{LIST OF TABLES}
+    \begin{flatcenter}
+        LIST OF TABLES
 
         \vspace{3em}
+    \end{flatcenter}
 
-        % insert list of tables
-        \@starttoc{lot}
-    }
+    % insert list of tables
+    {\singlespace \@starttoc{lot}}
 
     \newpage
 }
@@ -440,15 +512,14 @@
 
 % command to make list of figures
 \renewcommand{\listoffigures}{%
-    {\singlespace
-
-        \centerline{LIST OF FIGURES}
+    \begin{flatcenter}
+        LIST OF FIGURES
 
         \vspace{3em}
+    \end{flatcenter}
 
-        % insert list of figures
-        \@starttoc{lof}
-    }
+    % insert list of figures
+    {\singlespace \@starttoc{lof}}
 
     \newpage
 }
@@ -456,10 +527,12 @@
 % Body
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \frontmatter \mainmatter \backmatter and \appendix commands come 
-% from the book class, not real need to override anything yet
+% \frontmatter \mainmatter \backmatter and \appendix commands come from the book class
 
-% Referencing
+% hack to allow appendix after the bibliography
+%\g@addto@macro\appendix\@mainmattertrue
+
+% Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % left-align bibliography entries by filling right of the label number
@@ -472,7 +545,7 @@
     \chapter*{\bibname}%
     \phantomsection%
     \addcontentsline{toc}{chapter}{\bibname}%
-    \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
+    \@mkboth{\MakeUppercase{\bibname}}{\MakeUppercase{\bibname}}%
 
     % create list of bibliography entries
     \list{\@biblabel{\@arabic\c@enumiv}}%
@@ -488,12 +561,3 @@
 {\def\@noitemerr
     {\@latex@warning{Empty `thebibliography' environment}}%
 \endlist}
-
-% define custom commands for creating references
-% for tables, figures, equations and such
-\RequirePackage{cite}
-\newcommand{\eref}[1]{\eqref{#1}}       % cite equation
-\newcommand{\fref}[1]{Figure~\ref{#1}}  % cite figure
-\newcommand{\cref}[1]{Chapter~\ref{#1}} % cite chapter
-\newcommand{\sref}[1]{Section~\ref{#1}} % cite section/sub(sub)section
-\newcommand{\tref}[1]{Table~\ref{#1}}   % cite table
