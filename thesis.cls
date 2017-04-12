@@ -81,6 +81,28 @@
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
 
+% provide an environment for creating landscape pages
+% for big tables and figures
+% this is kind of a hack for now
+\ifCLASSOPTIONpdf
+    \RequirePackage{pdflscape}
+\else
+    \RequirePackage{lscape}
+\fi
+\newenvironment{sidewayspage}{%
+    \newgeometry{verbose, letterpaper, heightrounded,
+                 lmargin=1in, rmargin=0.45in,
+                 tmargin=1in, bmargin=1in}%
+    \begin{landscape}%
+    \thispagestyle{empty}%
+}{%
+        \null%
+        \vfill%
+        \centerline{\normalsize\thepage}%
+\end{landscape}%
+\restoregeometry%
+}
+
 % Fonts
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -92,7 +114,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % remove rule above footnote and places further down page
-\RequirePackage[flushmargin,bottom]{footmisc}
+%\RequirePackage[flushmargin,bottom]{footmisc}
+\RequirePackage[bottom]{footmisc}
 
 % space between footnotes if there are multiple on one page
 \setlength{\footnotesep}{1.5em}
@@ -245,29 +268,6 @@
 % command to create centered environment with no
 % indentation and without extra space above or below
 \newenvironment{flatcenter}{\centering \zeroindent}{\par}
-
-% provide an environment for creating landscape pages
-% for big tables and figures
-% this is kind of a hack for now
-\ifCLASSOPTIONpdf
-    \RequirePackage{pdflscape}
-\else
-    \RequirePackage{lscape}
-\fi
-\newenvironment{sidewayspage}
-{%
-    \newgeometry{verbose, letterpaper, heightrounded,
-                 lmargin=1in, rmargin=0.45in,
-                 tmargin=1in, bmargin=1in}%
-    \begin{landscape}%
-    \thispagestyle{empty}%
-}{%
-        \null%
-        \vfill%
-        \centerline{\normalsize\thepage}%
-\end{landscape}%
-\restoregeometry%
-}
 
 % Citation and reference formatting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -495,11 +495,16 @@
 
 % command to make list of tables
 \renewcommand{\listoftables}{%
+    % add to table of contents
+    \prelimtocentry{List of Tables}
+
     \begin{flatcenter}
         LIST OF TABLES
 
         \vspace{3em}
     \end{flatcenter}
+
+    \vspace{-26pt}
 
     % insert list of tables
     {\singlespace \@starttoc{lot}}
@@ -512,11 +517,16 @@
 
 % command to make list of figures
 \renewcommand{\listoffigures}{%
+    % add to table of contents
+    \prelimtocentry{List of Figures}
+
     \begin{flatcenter}
         LIST OF FIGURES
 
         \vspace{3em}
     \end{flatcenter}
+
+    \vspace{-26pt}
 
     % insert list of figures
     {\singlespace \@starttoc{lof}}
