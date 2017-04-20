@@ -33,7 +33,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/04/12 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/04/20 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
@@ -44,15 +44,18 @@
 \DeclareOption{master}{\CLASSOPTIONbachelorfalse  \CLASSOPTIONmastertrue  \CLASSOPTIONdoctorfalse}
 \DeclareOption{doctor}{\CLASSOPTIONbachelorfalse  \CLASSOPTIONmasterfalse \CLASSOPTIONdoctortrue}
 
+\newif\ifCLASSOPTIONshowframe \CLASSOPTIONshowframefalse
+\DeclareOption{showframe}{\CLASSOPTIONshowframetrue}
+
+% disable features that are specific to pdf output
+\newif\ifCLASSOPTIONpdf \CLASSOPTIONpdftrue
+\DeclareOption{nopdf}{\CLASSOPTIONpdffalse}
+
 % provide classoption for subfigure compatibility
 % note that the subfig package should generally be used instead
 % of subfigure, so this option shouldn't be necessary unless you insist
 \newif\ifCLASSOPTIONsubfigure \CLASSOPTIONsubfigurefalse
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
-
-% disable features that are specific to pdf output
-\newif\ifCLASSOPTIONpdf \CLASSOPTIONpdftrue
-\DeclareOption{nopdf}{\CLASSOPTIONpdffalse}
 
 % some default options for the book class
 \PassOptionsToClass{oneside,openany,letterpaper,12pt}{book}
@@ -77,6 +80,10 @@
 \geometry{verbose, letterpaper, heightrounded,
           lmargin=1in, rmargin=1in, % 1in margins
           tmargin=1in, bmargin=1in, footskip=0.5in}
+
+\ifCLASSOPTIONshowframe
+    \geometry{showframe}
+\fi
 
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
@@ -164,17 +171,28 @@
     \RequirePackage[titles]{tocloft} % use tocloft package to modify toc
 \fi
 
+\RequirePackage{calc}
+
 % indentation before chapters or sections
 \setlength{\cftchapindent}{0in}
-\setlength{\cftsecindent}{0.1in}
-\setlength{\cftsubsecindent}{0.2in}
-\setlength{\cftsubsubsecindent}{0.3in}
+\setlength{\cftsecindent}{0.2in}
+\setlength{\cftsubsecindent}{0.3in}
+\setlength{\cftsubsubsecindent}{0.4in}
 
 % same spaces between section numbers and names
-\setlength{\cftchapnumwidth}{4em}
-\setlength{\cftsecnumwidth}{4em}
-\setlength{\cftsubsecnumwidth}{4em}
-\setlength{\cftsubsubsecnumwidth}{4em}
+\setlength{\cftchapnumwidth}{0em}
+\setlength{\cftsecnumwidth}{1in}
+\setlength{\cftsubsecnumwidth}{1.1in}
+\setlength{\cftsubsubsecnumwidth}{1.2in}
+
+\renewcommand{\cftchappresnum}{\chaptername\space}
+\AtBeginDocument{\addtolength\cftchapnumwidth{\widthof{Appendix~MM~}}}
+
+\g@addto@macro\appendix{%
+  \addtocontents{toc}{%
+    \protect\renewcommand{\protect\cftchappresnum}{\appendixname\space}%
+  }%
+}
 
 % dots same for chapters and sections
 \renewcommand{\cftchapdotsep}{\cftdotsep}
@@ -202,7 +220,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % adjust spacing around chapter/section headings
-\def\@abovechap{-25pt}  % above chapter headings
+%\def\@abovechap{-25pt}  % above chapter headings
+\def\@abovechap{-34pt}  % above chapter headings
 \def\@belowchap{0.8em}    % below chapter headings
 \def\@abovesec{1em}     % above section headings
 \def\@belowsec{0.3em}   % below section headings
@@ -214,32 +233,80 @@
 \newcommand{\@subsecsize}{\normalsize}
 \newcommand{\@subsubsecsize}{\normalsize}
 
-% titlesec is used to customize chapter and section headings
-\RequirePackage{titlesec}
+%%\RequirePackage{sectsty}
+%%
+%%\chapterfont{\@chapsize}
+%%\sectionfont{\@secsize}
+%%\subsectionfont{\@subsecsize}
+%%\subsubsectionfont{\@subsubsecsize}
 
-% set up fonts and spacing around the chapter headings
-\titleformat{\chapter}[display] % display argument yields two-line heading
-    {\normalfont\bfseries\@chapsize}
-    {\chaptertitlename\ \ \thechapter}{0em}{\bfseries\@chapsize}
-\titlespacing*{\chapter}{0em}{\@abovechap}{\@belowchap}
+\def\@makechapterhead#1{%
+  \vspace*{\@abovechap}
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \@chapsize\bfseries \@chapapp\space \thechapter
+        \par\nobreak
+      \else
+        \@chapsize\bfseries \@chapapp\space \thechapter
+      \fi
+    \fi
+    \interlinepenalty\@M
+    \@chapsize\bfseries #1\par\nobreak
+    \vskip \@belowchap
+  }}
 
-% set up fonts and spacing around the section headings
-\titleformat{\section}
-    {\normalfont\bfseries\@secsize}
-    {\thesection}{1em}{\bfseries\@secsize}
-\titlespacing*{\section}{0em}{\@abovesec}{\@belowsec}
+\def\@makeschapterhead#1{%
+  \vspace*{\@abovechap}
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \@chapsize\bfseries  #1 \par\nobreak
+    \vskip \@belowchap
+  }}
 
-% set up fonts and spacing around the subsection headings
-\titleformat{\subsection}
-    {\normalfont\bfseries\@subsecsize}
-    {\thesection}{1em}{\bfseries\@subsecsize}
-\titlespacing*{\subsection}{0em}{\@abovesec}{\@belowsec}
+\renewcommand\section{\@startsection {section}{1}{0pt}%
+            {\@abovesec}{\@belowsec}{\normalfont\@secsize\bfseries}}
 
-% set up fonts and spacing around the subsubsection headings
-\titleformat{\subsubsection}
-    {\normalfont\bfseries\@subsubsecsize}
-    {\thesection}{1em}{\bfseries\@subsubsecsize}
-\titlespacing*{\subsubsection}{0em}{\@abovesec}{\@belowsec}
+\renewcommand\subsection{\@startsection{subsection}{2}{0pt}%
+            {\@abovesec}{\@belowsec}{\normalfont\@subsecsize\bfseries}}
+
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
+            {\@abovesec}{\@belowsec}{\normalfont\@subsubsecsize\bfseries}}
+
+%% % titlesec is used to customize chapter and section headings
+%% \RequirePackage{titlesec}
+%% 
+%% % set up fonts and spacing around the chapter headings
+%% \titleformat{\chapter}[display] % display argument yields two-line heading
+%%     {\normalfont\bfseries\@chapsize}
+%%     {\chaptertitlename\ \ \thechapter}{0em}{\bfseries\@chapsize}
+%% \titlespacing*{\chapter}{0em}{\@abovechap}{\@belowchap}
+%% 
+%% % set up fonts and spacing around the section headings
+%% \titleformat{\section}[block]
+%%     {\normalfont\bfseries\@secsize}
+%%     {\thesection}{1em}{}{\bfseries\@secsize}
+%% \titlespacing*{\section}{0em}{\@abovesec}{\@belowsec}
+%% 
+%% % set up fonts and spacing around the subsection headings
+%% \titleformat{\subsection}[block]
+%%     {\normalfont\bfseries\@subsecsize}
+%%     {\thesubsection}{1em}{\bfseries\@subsecsize}
+%% \titlespacing*{\subsection}{0em}{\@abovesec}{\@belowsec}
+%% 
+%% % set up fonts and spacing around the subsubsection headings
+%% \titleformat{\subsubsection}[block]
+%%     {\normalfont\bfseries\@subsubsecsize}
+%%     {\thesubsubsection}{1em}{\bfseries\@subsubsecsize}
+%% \titlespacing*{\subsubsection}{0em}{\@abovesec}{\@belowsec}
+
+%%\let\origsection\section
+%%\let\origsubsection\subsection
+%%\let\origsubsubsection\subsubsection
+%%\renewcommand{\section}[1]{\vspace*{0em}\origsection{#1}}
+%%\renewcommand{\subsection}[1]{\vspace*{0em}\origsubsection{#1}}
+%%\renewcommand{\subsubsection}[1]{\vspace*{0em}\origsubsubsection{#1}}
 
 % Typesetting rules
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -540,7 +607,7 @@
 % \frontmatter \mainmatter \backmatter and \appendix commands come from the book class
 
 % hack to allow appendix after the bibliography
-%\g@addto@macro\appendix\@mainmattertrue
+\g@addto@macro\appendix\@mainmattertrue
 
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
