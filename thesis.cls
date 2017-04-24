@@ -592,7 +592,8 @@
 % left-align bibliography entries by filling right of the label number
 \renewcommand{\@biblabel}[1]{[#1]\hfill}
 
-% bibliography environment with flush left margin
+% bibliography environment with flush left margin,
+% appropriate toc entry, not sloppy and our penalty values
 % modified from book.cls
 \renewenvironment{thebibliography}[1]{%
     % set up unnumbered chapter and add to table of contents
