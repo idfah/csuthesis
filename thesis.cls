@@ -33,7 +33,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/04/20 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/04/24 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
@@ -44,8 +44,15 @@
 \DeclareOption{master}{\CLASSOPTIONbachelorfalse  \CLASSOPTIONmastertrue  \CLASSOPTIONdoctorfalse}
 \DeclareOption{doctor}{\CLASSOPTIONbachelorfalse  \CLASSOPTIONmasterfalse \CLASSOPTIONdoctortrue}
 
+% show frame around margins
 \newif\ifCLASSOPTIONshowframe \CLASSOPTIONshowframefalse
 \DeclareOption{showframe}{\CLASSOPTIONshowframetrue}
+
+% use sloppy typesetting rules
+% helps with hbox overfull and reduces hyphenation
+% but may lead to excessively wide spaces
+\newif\ifCLASSOPTIONsloppy \CLASSOPTIONsloppyfalse
+\DeclareOption{sloppy}{\CLASSOPTIONsloppytrue}
 
 % disable features that are specific to pdf output
 \newif\ifCLASSOPTIONpdf \CLASSOPTIONpdftrue
@@ -81,6 +88,7 @@
           lmargin=1in, rmargin=1in, % 1in margins
           tmargin=1in, bmargin=1in, footskip=0.5in}
 
+% show frame around page margins if requested
 \ifCLASSOPTIONshowframe
     \geometry{showframe}
 \fi
@@ -88,17 +96,21 @@
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
 
+% reduce topskip to ensure text is flush with top margin
+% grad school is obsessed with having a flush top margin
+\topskip=9pt
+
 % provide an environment for creating landscape pages
 % for big tables and figures
-% this is kind of a hack for now
+% this is kind of a hack for now but gets the job done
+% any ideas for a better solution?
 \ifCLASSOPTIONpdf
     \RequirePackage{pdflscape}
 \else
     \RequirePackage{lscape}
 \fi
 \newenvironment{sidewayspage}{%
-    \newgeometry{verbose, letterpaper, heightrounded,
-                 lmargin=1in, rmargin=0.45in,
+    \newgeometry{lmargin=1in, rmargin=0.45in,
                  tmargin=1in, bmargin=1in}%
     \begin{landscape}%
     \thispagestyle{empty}%
@@ -121,7 +133,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % remove rule above footnote and places further down page
-%\RequirePackage[flushmargin,bottom]{footmisc}
 \RequirePackage[bottom]{footmisc}
 
 % space between footnotes if there are multiple on one page
@@ -171,23 +182,22 @@
     \RequirePackage[titles]{tocloft} % use tocloft package to modify toc
 \fi
 
-\RequirePackage{calc}
-
 % indentation before chapters or sections
 \setlength{\cftchapindent}{0in}
 \setlength{\cftsecindent}{0.2in}
 \setlength{\cftsubsecindent}{0.3in}
 \setlength{\cftsubsubsecindent}{0.4in}
 
-% same spaces between section numbers and names
-\setlength{\cftchapnumwidth}{0em}
+% same spaces between margin and chap/sec titles
+\setlength{\cftchapnumwidth}{1in}
 \setlength{\cftsecnumwidth}{1in}
 \setlength{\cftsubsecnumwidth}{1.1in}
 \setlength{\cftsubsubsecnumwidth}{1.2in}
 
+% chapter name in toc is "Chapter N"
 \renewcommand{\cftchappresnum}{\chaptername\space}
-\AtBeginDocument{\addtolength\cftchapnumwidth{\widthof{Appendix~MM~}}}
 
+% appendix name in toc is "Appendix A"
 \g@addto@macro\appendix{%
   \addtocontents{toc}{%
     \protect\renewcommand{\protect\cftchappresnum}{\appendixname\space}%
@@ -220,26 +230,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % adjust spacing around chapter/section headings
-%\def\@abovechap{-25pt}  % above chapter headings
-\def\@abovechap{-34pt}  % above chapter headings
-\def\@belowchap{0.8em}    % below chapter headings
-\def\@abovesec{1em}     % above section headings
-\def\@belowsec{0.3em}   % below section headings
+\def\@abovechap{-36pt}  % above chapter headings
+\def\@belowchap{12pt}  % below chapter headings
+\def\@abovesec{12pt}     % above section headings
+\def\@belowsec{2pt}   % below section headings
 % note: abovesec does not affect section headings at top of page!
 
 % font sizes for chapter, section and subsection headings
-\newcommand{\@chapsize}{\Large}
-\newcommand{\@secsize}{\large}
-\newcommand{\@subsecsize}{\normalsize}
+\newcommand{\@chapsize}{\LARGE}
+\newcommand{\@secsize}{\Large}
+\newcommand{\@subsecsize}{\large}
 \newcommand{\@subsubsecsize}{\normalsize}
 
-%%\RequirePackage{sectsty}
-%%
-%%\chapterfont{\@chapsize}
-%%\sectionfont{\@secsize}
-%%\subsectionfont{\@subsecsize}
-%%\subsubsectionfont{\@subsubsecsize}
-
+% remove space above chapter headings
+% this code is modified from book.cls
+% i would prefer to do this using the titlesec
+% package but titlesec is a little loose with the
+% margins and that isn't satisfactory to grad school
 \def\@makechapterhead#1{%
   \vspace*{\@abovechap}
   {\parindent \z@ \raggedright \normalfont
@@ -264,7 +271,10 @@
     \@chapsize\bfseries  #1 \par\nobreak
     \vskip \@belowchap
   }}
+% end modified from book class
 
+% redefine section commands to change size and spacing
+% could be done with titlesec but that would break margins
 \renewcommand\section{\@startsection {section}{1}{0pt}%
             {\@abovesec}{\@belowsec}{\normalfont\@secsize\bfseries}}
 
@@ -273,40 +283,6 @@
 
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsubsecsize\bfseries}}
-
-%% % titlesec is used to customize chapter and section headings
-%% \RequirePackage{titlesec}
-%% 
-%% % set up fonts and spacing around the chapter headings
-%% \titleformat{\chapter}[display] % display argument yields two-line heading
-%%     {\normalfont\bfseries\@chapsize}
-%%     {\chaptertitlename\ \ \thechapter}{0em}{\bfseries\@chapsize}
-%% \titlespacing*{\chapter}{0em}{\@abovechap}{\@belowchap}
-%% 
-%% % set up fonts and spacing around the section headings
-%% \titleformat{\section}[block]
-%%     {\normalfont\bfseries\@secsize}
-%%     {\thesection}{1em}{}{\bfseries\@secsize}
-%% \titlespacing*{\section}{0em}{\@abovesec}{\@belowsec}
-%% 
-%% % set up fonts and spacing around the subsection headings
-%% \titleformat{\subsection}[block]
-%%     {\normalfont\bfseries\@subsecsize}
-%%     {\thesubsection}{1em}{\bfseries\@subsecsize}
-%% \titlespacing*{\subsection}{0em}{\@abovesec}{\@belowsec}
-%% 
-%% % set up fonts and spacing around the subsubsection headings
-%% \titleformat{\subsubsection}[block]
-%%     {\normalfont\bfseries\@subsubsecsize}
-%%     {\thesubsubsection}{1em}{\bfseries\@subsubsecsize}
-%% \titlespacing*{\subsubsection}{0em}{\@abovesec}{\@belowsec}
-
-%%\let\origsection\section
-%%\let\origsubsection\subsection
-%%\let\origsubsubsection\subsubsection
-%%\renewcommand{\section}[1]{\vspace*{0em}\origsection{#1}}
-%%\renewcommand{\subsection}[1]{\vspace*{0em}\origsubsection{#1}}
-%%\renewcommand{\subsubsection}[1]{\vspace*{0em}\origsubsubsection{#1}}
 
 % Typesetting rules
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -320,10 +296,10 @@
 \predisplaypenalty=500  % discourage single line before equations
 \raggedbottom           % be flexible with bottom margin
 
-% this makes the typesetting rules less strict
-% helps prevent hbox overflow and such but leads
-% to weird looking, overly wide spacing in places
-%\sloppy
+% this makes the typesetting rules less strict if requested
+\ifCLASSOPTIONsloppy
+    \sloppy
+\fi
 
 % indent first paragraphs
 \let\@afterindentfalse\@afterindenttrue
@@ -607,6 +583,7 @@
 % \frontmatter \mainmatter \backmatter and \appendix commands come from the book class
 
 % hack to allow appendix after the bibliography
+% yuck but grad school insists appendix comes after bibliography
 \g@addto@macro\appendix\@mainmattertrue
 
 % Bibliography
@@ -615,8 +592,8 @@
 % left-align bibliography entries by filling right of the label number
 \renewcommand{\@biblabel}[1]{[#1]\hfill}
 
-% bibliography environment
-% tweaked from environment in book.cls
+% bibliography environment with flush left margin
+% modified from book.cls
 \renewenvironment{thebibliography}[1]{%
     % set up unnumbered chapter and add to table of contents
     \chapter*{\bibname}%
@@ -638,3 +615,4 @@
 {\def\@noitemerr
     {\@latex@warning{Empty `thebibliography' environment}}%
 \endlist}
+% end modified from book.cls
