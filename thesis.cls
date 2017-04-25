@@ -33,7 +33,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/04/24 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/04/25 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
@@ -97,7 +97,6 @@
 \RequirePackage[doublespacing]{setspace}
 
 % reduce topskip to ensure text is flush with top margin
-% grad school is obsessed with having a flush top margin
 \topskip=9pt
 
 % provide an environment for creating landscape pages
@@ -243,10 +242,9 @@
 \newcommand{\@subsubsecsize}{\normalsize}
 
 % remove space above chapter headings
+% i would prefer to do this using the titlesec package
+% but titlesec is a little loose with the top margins
 % this code is modified from book.cls
-% i would prefer to do this using the titlesec
-% package but titlesec is a little loose with the
-% margins and that isn't satisfactory to grad school
 \def\@makechapterhead#1{%
   \vspace*{\@abovechap}
   {\parindent \z@ \raggedright \normalfont
@@ -582,8 +580,8 @@
 
 % \frontmatter \mainmatter \backmatter and \appendix commands come from the book class
 
-% hack to allow appendix after the bibliography
-% yuck but grad school insists appendix comes after bibliography
+% hack to allow appendix after the bibliography by resetting to mainmatter
+% yuck but the guidelines insist the appendix comes after bibliography
 \g@addto@macro\appendix\@mainmattertrue
 
 % Bibliography
