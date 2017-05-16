@@ -136,24 +136,24 @@ All Rights reserved
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \abstract{%
-This document aims to get you started typesetting your thesis or dissertation in \LaTeX{}.  It serves both as a sample and as the documentation for this package.  You may replace this text with your abstract.
+This document aims to get you started typesetting your thesis or dissertation in \LaTeX{}.  It serves both as a sample and as the documentation for this package.  Please review the entire document for helpful tips about formatting your thesis or dissertation.  You may replace this text with your abstract.
 }
 
 % Acknowledgments 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \acknowledgements{%
-We would like to thank the CSU Graduate Student Council for iniaiting and funding the creation of this project and to the CSU Graduate School for their assistance and feedback.  Thank you to CSU for being awsome and to Elliott Forney for creating the initial version of this template.  You may replace this text with your acknowledgements.
+I would like to thank the CSU Graduate Student Council for iniaiting and supporting the creation of this project and the CSU Graduate School for their assistance and feedback.  Thank you to CSU for being awsome, to the creators of \LaTeX{} for making a great typesetting tool and to everyone who has contributed to this template.  You may replace this text with your own acknowledgements.
 }
 
 % Metadata
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% use hyperref to insert pdf metadata and make links clickable
+% consider using hyperref to insert pdf metadata and make links clickable
 % safe to remove if not using pdf or if it causes problems
 \usepackage[pdfpagelabels,pdfusetitle,colorlinks=false,pdfborder={0 0 0}]{hyperref}
 
-\begin{document} % preamble is complete, add custom packages above
+\begin{document} % preamble is complete, add any custom packages above
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frontmatter % starts preliminary pages
@@ -163,24 +163,27 @@ We would like to thank the CSU Graduate Student Council for iniaiting and fundin
 \makemycopyright
 \makeabstract
 \makeacknowledgements
-\tableofcontents
-%\listoftables % optional
-%\listoffigures % optional
 
 % any extra preliminary pages can be added here
 % below is an example of a dedication page
-\begin{center}
-    \phantomsection
-    \addcontentsline{toc}{chapter}{Dedication}
+% the dedication page is optional
+\prelimtocentry{Dedication} % add table of contents entry
+\begin{flatcenter} % center without extra space
 
+    % page title
     DEDICATION
 
     %\vspace{3em} % place at top
     \vfill % or center on page
+
     \noindent \textit{I would like to dedicate this thesis to my dog fluffy.}
-    \vfill
-\end{center}
+    \vfill % fill extra space at bottom
+\end{flatcenter}
 \newpage
+
+\tableofcontents
+\listoftables % optional
+\listoffigures % optional
 
 \mainmatter % starts thesis body
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,17 +192,39 @@ We would like to thank the CSU Graduate Student Council for iniaiting and fundin
 \label{chap:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Thank you for downloading the Colorado State University (CSU) \LaTeX{} document class and template for theses and dissertations.  The goal of this document is to get you started writing and typesetting your thesis in \LaTeX{}.  This document serves both as a guide for using this package and as a sample template to get you started.  After reading over this guide, please see the source code for this file to get started.
+Thank you for downloading the Colorado State University (CSU) \LaTeX{} document class and template for theses and dissertations.  The goal of this document is to get you started writing and typesetting your thesis in \LaTeX{}.  This document serves both as a guide for using this package and as a sample template to get you started.  Please review the entire document for useful information on typesetting your thesis or dissertation.  After reading over this guide, please see the source code for this document to get started.
 
 Please note that while this package was sponsored by the CSU Graduate Student Council and by the CSU Graduate School, it is not officially supported by CSU.  Instead, it is intended that this document will be supported by its community of users and by the students themselves, that's you!  This document is currently hosted on GitHub at \url{https://github.com/idfah/csuthesis}.  If you have a patch or improvement that you would like included, please submit a pull request on GitHub.  For information on the official guidelines for formatting your thesis, please visit the CSU electronic thesis and dissertation resources page at \url{http://graduateschool.colostate.edu/for-current-students/completing-your-degree/thesis-dissertation/}.
 
-Also, note that this package is free, public domain software.  See the header of the source code for the full copyright license.  You are free to modify, distribute and fork this software in any that you would like.
+Also, note that this package is free software.  See the header of the source code for the full copyright license.  You are free to modify, distribute, fork and otherwise use this software in any that you would like.
 
 \chapter{The Thesis Document Class}
 
-This package includes a \LaTeX{} document class called \textit{thesis.cls}, which extends the standard \textit{book.cls} that is included with most \LaTeX{} distributions.  Most of the features that work in \textit{book.cls} will also work in \textit{thesis.cls}; however, the setup of the title and other preliminary pages and various aspects of the document's formatting have been modified.  Also, \textit{thesis.cls} provides a few extra commands that may be useful.
+This package includes a \LaTeX{} document class called \textit{thesis.cls}, which extends the \textit{book.cls} that is included with standard \LaTeX{} distributions.  Many of the features that work in \textit{book.cls} will also work in \textit{thesis.cls}; however, the setup of the title and other preliminary pages and various aspects of the document's formatting have been modified.  Note that \textit{thesis.cls} passes the following options to \textit{book.cls}: \textbf{oneside}, \textbf{openany}, \textbf{letterpaper}, \textbf{12pt}.  This means that your thesis will have a 12pt font and does not leave extra space on odd pages for binding.  Also, \textit{thesis.cls} provides a few extra options and commands that may be useful.  These features are described in detail below.
 
 \section{Required Packages}
+
+You will need to have several \LaTeX{} packages installed in order for \textit{thesis.cls} to work correctly.  While most standard \LaTeX{} distributions include these packages, some systems may require you to install them.  In Linux with texlive, For example, you may need to locate some of these packages (they are typically called something like texlive-packagename).
+
+\begin{itemize}
+    \item \textbf{geometry}  This package is required for setting up your document's margins.
+
+    \item \textbf{setspace}  This package is required to enable double spacing.
+
+    \item \textbf{pdflscape}  or \textbf{lscape}  These packages are required for inserting landscape pages.  \textbf{pdflscape} is required if you are compiling directly to pdf (using the pdf class option described below) and \textbf{lscape} is required if you are not compiling to pdf.
+
+    \item \textbf{fontenc} and \textbf{times}  These packages are required for setting up the default \textit{times} font.  Note that you may use a different font, if you choose, by loading the corresponding package after loading the document class.
+
+    \item \textbf{footmisc}  This package is required for setting up footnotes.
+
+    \item \textbf{remreset}  This package is required for preventing the footnote numbering from resetting after each chapter.
+
+    \item \textbf{caption}  This package is required for formatting captions around figures and tables.
+
+    \item \textbf{tocloft}  This package is required for formatting the table of contents and similar pages.
+
+    \item \textbf{cite}  This package is required for citing various things, including tables figures and references.
+\end{itemize}
 
 \section{Document Class Options}
 
@@ -207,9 +232,17 @@ The \textit{thesis.cls} document class also provides a number of options that ca
 
 \begin{itemize}
     \item \textbf{bachelor}  This sets the formatting style to be suitable for an undergraduate Honor's Thesis.
+
     \item \textbf{master}  This sets the formatting style to be appropriate for a graduate Master's Thesis.
+
     \item \textbf{doctor}  This sets the formatting style to be appropriate for a graduate PhD Dissertation.
+
+    \item \textbf{showframe}  This shows a frame around the page at the margins, headers and footers.  This can be useful for debugging problems with your margins, e.g., if your top margin is too large.
+
+    \item \textbf{raggedright}  This options formats your document with left-justified text and a ragged right margin.   Without setting this option, the standard fully-justified format will be used and words will be hyphenated when necessary for line breaks.  Note that \textbf{raggedright} looks more like an MS Word document while the default looks more like a typical \LaTeX{} document.
+
     \item \textbf{nopdf}  This prevents the use of features that are specific to pdf output formats.  Specify this option if you are using a different format, such as PostScript or DVI.
+
     \item \textbf{subfigure}  This enables compatibility with the \textit{subfigure} package.  Note that \textit{subfigure} is now depreciated in favor of the \textit{subfig} package, which is supported by default.
 \end{itemize}
 
@@ -342,14 +375,6 @@ Let's cite a bunch of things \cite{forney20112749, cebl, forney2011thesis, forne
 
 \chapter{Formatting Tips and Tricks}
 
-\appendix % starts the appendices
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\chapter{A Bunch of Cryptic Text}
-\label{appendix:cryptic}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\lipsum
-
 \backmatter % starts unnumbered supplementary material
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -360,6 +385,14 @@ Let's cite a bunch of things \cite{forney20112749, cebl, forney2011thesis, forne
 % check here for more:  https://www.sharelatex.com/learn/Bibtex_bibliography_styles
 \bibliographystyle{unsrt}
 \bibliography{sample} % change readme to the name of your .tex file
+
+\appendix % starts the appendices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Test Appendix}
+\label{appendix:cryptic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lipsum
 
 % Have a nice day!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

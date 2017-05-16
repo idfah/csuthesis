@@ -33,7 +33,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/04/25 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/04/26 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
@@ -48,11 +48,9 @@
 \newif\ifCLASSOPTIONshowframe \CLASSOPTIONshowframefalse
 \DeclareOption{showframe}{\CLASSOPTIONshowframetrue}
 
-% use sloppy typesetting rules
-% helps with hbox overfull and reduces hyphenation
-% but may lead to excessively wide spaces
-\newif\ifCLASSOPTIONsloppy \CLASSOPTIONsloppyfalse
-\DeclareOption{sloppy}{\CLASSOPTIONsloppytrue}
+% left-justify text with ragged right margin
+\newif\ifCLASSOPTIONraggedright \CLASSOPTIONraggedrightfalse
+\DeclareOption{raggedright}{\CLASSOPTIONraggedrighttrue}
 
 % disable features that are specific to pdf output
 \newif\ifCLASSOPTIONpdf \CLASSOPTIONpdftrue
@@ -65,6 +63,7 @@
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
 
 % some default options for the book class
+% note that we assume letter paper and 12pt font
 \PassOptionsToClass{oneside,openany,letterpaper,12pt}{book}
 
 % pass remaining options to book class
@@ -78,6 +77,13 @@
 
 % book class is used as a base
 \LoadClass{book}
+
+% Fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% use times font by default
+\RequirePackage[T1]{fontenc}
+\RequirePackage{times}
 
 % Page formatting and layout
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -97,6 +103,7 @@
 \RequirePackage[doublespacing]{setspace}
 
 % reduce topskip to ensure text is flush with top margin
+% assumes 12pt font
 \topskip=9pt
 
 % provide an environment for creating landscape pages
@@ -121,12 +128,41 @@
 \restoregeometry%
 }
 
-% Fonts
+% Typesetting rules
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% use times font by default
-\RequirePackage[T1]{fontenc}
-\RequirePackage{times}
+% discourage single lines of a paragraph from landing at the
+% bottom or top of page, a.k.a, widows and orphans
+% this configuration should prevent orphans and widows in all
+% but the most pathological cases
+\clubpenalty=10000      % penalty for breaking after first line of a paragraph
+\widowpenalty=10000     % penalty for breaking before last line of a paragraph
+\predisplaypenalty=500  % discourage single line before equations
+\raggedbottom           % be flexible with bottom margin
+
+% indent first paragraphs
+\let\@afterindentfalse\@afterindenttrue
+\@afterindenttrue
+
+% redefine raggedright command so that it doesn't
+% break paragraph indentation
+% modified from latex.ltx
+\renewcommand{\raggedright}{%
+    \let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip%
+    \leftskip\z@skip}
+
+% make all of document left-justified with ragged
+% right margin if requested
+\ifCLASSOPTIONraggedright
+    \AtBeginDocument{\raggedright}
+\fi
+
+% command to suppress indentation
+\newcommand{\zeroindent}{\setlength{\parindent}{0in}}
+
+% command to create centered environment with no
+% indentation and without extra space above or below
+\newenvironment{flatcenter}{\centering \zeroindent}{\par}
 
 % Footnotes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -183,15 +219,15 @@
 
 % indentation before chapters or sections
 \setlength{\cftchapindent}{0in}
-\setlength{\cftsecindent}{0.2in}
-\setlength{\cftsubsecindent}{0.3in}
-\setlength{\cftsubsubsecindent}{0.4in}
+\setlength{\cftsecindent}{0.18in}
+\setlength{\cftsubsecindent}{0.36in}
+\setlength{\cftsubsubsecindent}{0.54in}
 
-% same spaces between margin and chap/sec titles
+% space between margin and chap/sec titles
 \setlength{\cftchapnumwidth}{1in}
 \setlength{\cftsecnumwidth}{1in}
-\setlength{\cftsubsecnumwidth}{1.1in}
-\setlength{\cftsubsubsecnumwidth}{1.2in}
+\setlength{\cftsubsecnumwidth}{1in}
+\setlength{\cftsubsubsecnumwidth}{1in}
 
 % chapter name in toc is "Chapter N"
 \renewcommand{\cftchappresnum}{\chaptername\space}
@@ -282,34 +318,6 @@
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsubsecsize\bfseries}}
 
-% Typesetting rules
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% discourage single lines of a paragraph from landing at the
-% bottom or top of page, a.k.a, widows and orphans
-% this configuration should prevent orphans and widows in all
-% but the most pathological cases
-\clubpenalty=10000      % penalty for breaking after first line of a paragraph
-\widowpenalty=10000     % penalty for breaking before last line of a paragraph
-\predisplaypenalty=500  % discourage single line before equations
-\raggedbottom           % be flexible with bottom margin
-
-% this makes the typesetting rules less strict if requested
-\ifCLASSOPTIONsloppy
-    \sloppy
-\fi
-
-% indent first paragraphs
-\let\@afterindentfalse\@afterindenttrue
-\@afterindenttrue
-
-% command to suppress indentation
-\newcommand{\zeroindent}{\setlength{\parindent}{0in}}
-
-% command to create centered environment with no
-% indentation and without extra space above or below
-\newenvironment{flatcenter}{\centering \zeroindent}{\par}
-
 % Citation and reference formatting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -373,7 +381,7 @@
             % title in all caps
             {\MakeUppercase{\@title} \par}
 
-            \vspace*{\fill}
+            \vspace{\fill}
 
             Submitted by
 
@@ -381,7 +389,7 @@
 
             \@department
 
-            \vspace*{\fill}
+            \vspace{\fill}
 
             In partial fulfillment of the requirements
 
@@ -403,7 +411,7 @@
             \@semester
     \end{flatcenter}
 
-    \vspace*{\fill}
+    \vspace{\fill}
 
     {\singlespace \zeroindent
         \ifCLASSOPTIONbachelor
@@ -591,7 +599,7 @@
 \renewcommand{\@biblabel}[1]{[#1]\hfill}
 
 % bibliography environment with flush left margin,
-% appropriate toc entry, not sloppy and our penalty values
+% appropriate toc entry, and our penalty values
 % modified from book.cls
 \renewenvironment{thebibliography}[1]{%
     % set up unnumbered chapter and add to table of contents
@@ -609,6 +617,7 @@
           \usecounter{enumiv}%
           \let\p@enumiv\@empty
           \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+    \sloppy % :revents hbox overfull but looks nicer without it
     \sfcode`\.\@m%
 }
 {\def\@noitemerr
