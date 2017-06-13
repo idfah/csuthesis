@@ -2,7 +2,7 @@
 % Colorado State University LaTeX Thesis Document Class
 %
 % by
-%   Elliott Forney
+%   Elliott Forney - 2017-05-22
 %
 % This is free and unencumbered software released into the public domain.
 % 
@@ -33,7 +33,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/04/26 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/06/13 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
@@ -119,13 +119,13 @@
     \newgeometry{lmargin=1in, rmargin=0.45in,
                  tmargin=1in, bmargin=1in}%
     \begin{landscape}%
-    \thispagestyle{empty}%
+        \thispagestyle{empty}%
 }{%
         \null%
         \vfill%
         \centerline{\normalsize\thepage}%
-\end{landscape}%
-\restoregeometry%
+    \end{landscape}%
+    \restoregeometry%
 }
 
 % Typesetting rules
@@ -197,7 +197,7 @@
 \setlength{\intextsep}{2em}         % with text above and below
 \setlength{\textfloatsep}{2em}      % top/bottom of page with text above/below
 \setlength{\floatsep}{1em}          % between consecutive floats
-\setlength{\@fptop}{0em}            % top of float only pages
+\setlength{\@fptop}{0pt}            % top of float only pages
 \setlength{\@fpsep}{1em}            % between on float only pages
 \setlength{\@fpbot}{0em plus 1fil}  % bottom of float only pages
 
@@ -324,11 +324,12 @@
 % define custom commands for creating references
 % for tables, figures, equations and such
 \RequirePackage{cite}
-\newcommand{\eref}[1]{\eqref{#1}}       % cite equation
-\newcommand{\fref}[1]{Figure~\ref{#1}}  % cite figure
-\newcommand{\cref}[1]{Chapter~\ref{#1}} % cite chapter
-\newcommand{\sref}[1]{Section~\ref{#1}} % cite section/sub(sub)section
-\newcommand{\tref}[1]{Table~\ref{#1}}   % cite table
+\newcommand{\eref}[1]{\eqref{#1}}        % cite equation
+\newcommand{\fref}[1]{Figure~\ref{#1}}   % cite figure
+\newcommand{\cref}[1]{Chapter~\ref{#1}}  % cite chapter
+\newcommand{\sref}[1]{Section~\ref{#1}}  % cite section/sub(sub)section
+\newcommand{\aref}[1]{Appendix~\ref{#1}} % cite appendix
+\newcommand{\tref}[1]{Table~\ref{#1}}    % cite table
 
 % Title Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -455,7 +456,7 @@
     \begin{flatcenter}
         \@mycopyright
     \end{flatcenter}
-    \vspace*{\fill}
+    \vspace{\fill}
 
     % copyright page has no page number...
     % literally, no page number at all, SMH
