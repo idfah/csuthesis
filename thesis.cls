@@ -2,7 +2,8 @@
 % Colorado State University LaTeX Thesis Document Class
 %
 % by
-%   Elliott Forney - 2017-05-22
+%   Elliott Forney
+%   2017
 %
 % This is free and unencumbered software released into the public domain.
 % 
