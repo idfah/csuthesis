@@ -18,15 +18,12 @@ If you run into any bugs, shortcomings or other problems with this package, plea
 
 ## Acknowledgements
 
-I would like to thank [the CSU Graduate Student Council](https://sites.google.com/a/rams.colostate.edu/gsc/) and [the CSU Graduate School](http://graduateschool.colostate.edu/) for initiating, commissioning and supporting this project.  I would also like to thank Nicole Ramo for her support and ensuring that we followed through with this project to completion.  I would like to thank Leif Anderson, who created and supported the previous LaTeX template for a number of years.  Although I have never met Leif, his work was invaluable in the creation of this package and has helped many students get their thesis approved by the CSU graduate school.  Finally, I would like to thank everyone who helps to contribute to this package.  Your work will help many CSU graduate students to create professional, beautiful and compelling theses and dissertations using LaTex.
-
+I would like to thank [the CSU Graduate Student Council](https://sites.google.com/a/rams.colostate.edu/gsc/) and [the CSU Graduate School](http://graduateschool.colostate.edu/) for initiating, commissioning and supporting this project.  I would also like to thank Nicole Ramo for her support and ensuring that we followed through with this project to completion.  I would like to thank Leif Anderson, who created and supported the previous LaTeX template for a number of years.  Although I have never met Leif, his work was invaluable in the creation of this package and has helped many students get their thesis approved by the CSU graduate school.  Finally, I would like to thank everyone who helps to contribute to this package.  Your work will help many CSU graduate students to create professional, beautiful and compelling theses and dissertations using LaTex.  Last but not least, thank you to the creators and maintaners of LaTeX for creating a fantastic typesetting tool.
 ## License
 
 [Colorado State University LaTeX Thesis Template](https://github.com/idfah/csuthesis)
 
-by
-  [Elliott Forney](http://www.elliottforney.com)
-  2017
+by [Elliott Forney](http://www.elliottforney.com) - 2017
 
 This is free and unencumbered software released into the public domain.
 
