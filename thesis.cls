@@ -49,10 +49,6 @@
 \newif\ifCLASSOPTIONshowframe \CLASSOPTIONshowframefalse
 \DeclareOption{showframe}{\CLASSOPTIONshowframetrue}
 
-% left-justify text with ragged right margin
-\newif\ifCLASSOPTIONraggedright \CLASSOPTIONraggedrightfalse
-\DeclareOption{raggedright}{\CLASSOPTIONraggedrighttrue}
-
 % disable features that are specific to pdf output
 \newif\ifCLASSOPTIONpdf \CLASSOPTIONpdftrue
 \DeclareOption{nopdf}{\CLASSOPTIONpdffalse}
@@ -151,12 +147,6 @@
 \renewcommand{\raggedright}{%
     \let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip%
     \leftskip\z@skip}
-
-% make all of document left-justified with ragged
-% right margin if requested
-\ifCLASSOPTIONraggedright
-    \AtBeginDocument{\raggedright}
-\fi
 
 % command to suppress indentation
 \newcommand{\zeroindent}{\setlength{\parindent}{0in}}

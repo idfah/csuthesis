@@ -242,8 +242,6 @@ The \textit{thesis.cls} document class also provides a number of options that ca
 
     \item \textbf{showframe}  This shows a frame around the page at the margins, headers and footers.  This can be useful for debugging problems with your margins, e.g., if your top margin is too large.
 
-    \item \textbf{raggedright}  This options formats your document with left-justified text and a ragged right margin.   Without setting this option, the standard fully-justified format will be used and words will be hyphenated when necessary for line breaks.  Note that \textbf{raggedright} looks more like an MS Word document while the default looks more like a typical \LaTeX{} document.
-
     \item \textbf{nopdf}  This prevents the use of features that are specific to pdf output formats.  Specify this option if you are using a different format, such as PostScript.
 
     \item \textbf{subfigure}  This enables compatibility with the \textit{subfigure} package.  Note that \textit{subfigure} is now depreciated in favor of the \textit{subfig} package, which is supported by default.
@@ -289,18 +287,19 @@ Please note that \textit{thesis.cls} requires you to denote the various regions 
     \item \textbf{\textbackslash frontmatter}  This command denotes the beginning of the preliminary pages, such as the title page, copyright page, table of contents, et cetera.
     \item \textbf{\textbackslash mainmatter}  This command denotes the beginning of the main thesis text.  This is where you will write the bulk of your thesis.
     \item \textbf{\textbackslash backmatter}  This command denotes the beginning of unnumbered supplementary material.  Notably, this includes your bibliography.
-    \item \textbf{\textbackslash appendix}  This command denotes the beginning of any appendices that you may wish to add.  Appendices are created just like chapters but are labeled differently.
+    \item \textbf{\textbackslash appendix}  This command denotes the beginning of any appendices that you may wish to add.  Appendices are created just like chapters but are labeled differently.  Note that the CSU graduate school requires any appendices to come after the bibliography, which differs from the typical behavior of \textit{book.cls}.
 \end{itemize}
-
-Note that the CSU graduate school requires any appendices to come after the bibliography, which differs from the typical behavior of \textit{book.cls}.
 
 \chapter{Figures and Tables}
 \label{chap:figures.and.tables}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This section gives some examples of how to insert figures and tables.  Note that there are many variations on this and you should typically have the flexibility you need to do what works.  The most important thing to keep in mind is that captions go below figures and above tables.  Also, avoid the use of ``small caps.''
+This section gives some examples of how to insert figures and tables into your thesis.  Note that there are many variations on this and you should have the flexibility to do what you need.  The most important thing to keep in mind is that captions go below figures and above tables.
 
 \section{Figures}
+
+% note that figures can be referenced using the \fref command
+In \fref{fig:pso}, we see a demonstration of particle swarm optimization being applied to the Rosenbrock banana function.  See the source code of this document for sample usage.
 
 % htp tells LaTeX to try and put the figure here, at the top of the page
 % or on a new page.  LaTeX will attempt placement in that order.
@@ -309,52 +308,66 @@ This section gives some examples of how to insert figures and tables.  Note that
     % and with one of the graphics extensions defined in the preamble
     \includegraphics[width=0.45\textwidth]{pso}
 
-    % captions go below figures and above tables!
-    % the optional [] argument is a short version for the list-of-figures
+    % captions go below figures
+    % the optional [] argument is a short version for use in the list-of-figures
     \caption[Particle swarm optimization.]{A particle swarm optimizing the Rosenbrock banana function.}
 
     % label for referencing figures
     \label{fig:pso}
 \end{figure}
 
-
 \subsection{Subfigures}
 
-% if LaTeX (or the margin in your figure file) leads to extra space at
-% the top of the page, you may have to reverse the space with something
-% like this.  change the -1 to whatever gets you a 1in margin.
-% the graduate school is very picky about top margins and sometimes
-% vspace is the only solution
+In \fref{fig:pso.subfloat}, we again see particle swarm optimization applied to the Rosenbrock banana function.  Now we have two figures, \fref{fig:rosen:banana} and \fref{fig:rosen:pso}.  See the source of this document for sample usage.
+
+% if you have too much margin above your figure, \vspace can move things up
+% as a general, however, figures do not have to be exactly flush with the top margin
 \vspace{-1em} 
-\begin{figure}[p!]
-    \subfloat[The Rosenbrock banana function.]{\label{fig:rosen:banana}\includegraphics[width=0.45\textwidth]{banana}} \hfill
+\begin{figure}[p!] % p! puts the figure on it's own page
+    % use the subfloat to add each figure
+    % \\ can be used to start subfigures on the next line
+    % or \hfill will fill extra space between side-by-side figures
+    \subfloat[The Rosenbrock banana function.]{\label{fig:rosen:banana}\includegraphics[width=0.45\textwidth]{banana}} \\
+
+    % note that each subfloat can have it's own label
     \subfloat[Path of the particles.]{\label{fig:rosen:pso}\includegraphics[width=0.45\textwidth]{pso}}
+
     % the optional [] argument is a short version for the list-of-figures
     \caption[Using PSO to optimize the Rosenbrock banana function.]{Using PSO to optimize the Rosenbrock banana function.  (a)  The function to optimize.  (b)  The path of the particles as they find the global minima.}
+
+    % label for entire figure
+    \label{fig:pso.subfloat}
 \end{figure}
 
 \section{Sideways Pages}
 
+The thesis guidelines allow horizontal pages for extra wide tables and figures.  \textit{thesis.cls} provides the \textbf{sidewayspage} environment for inserting a single sideways page.  See the source of this document for sample usage.
+
+Note that the sideways page currently needs some work.  If things are too big to fig to fit, it will break and you will need to reduce the size of your figure or table.
+
 \begin{sidewayspage} % if your figures are too big to fig, things will break
-    \vspace{-1em}
     \begin{figure} % don't put [p] here!!
-        \subfloat[The Rosenbrock banana function.]{\label{fig:rosen:banana2}\includegraphics[width=4in]{banana}} \hfill
-        \subfloat[Path of the particles.]{\label{fig:rosen:pso2}\includegraphics[width=4in]{pso}}
-        \caption{Using PSO to optimize the Rosenbrock banana function.  (a)  The function to optimize.  (b)  The path of the particles as they find the global minima.}
+        \subfloat[The Rosenbrock banana function.]{\includegraphics[width=4in]{banana}} \hfill
+        \subfloat[Path of the particles.]{\includegraphics[width=4in]{pso}}
+        \caption[PSO on sideways page.]{Using PSO to optimize the Rosenbrock banana function.  (a)  The function to optimize.  (b)  The path of the particles as they find the global minima.}
     \end{figure}
 \end{sidewayspage}
 
 \section{Tables}
 
-\begin{table*}[hp]
+In \tref{table:sample}, we see an example of a simple table using the \textit{booktabs} package.  Note that other packages are available and allowed for making your tables if you prefer something different.  Table captions go above the table.  See the source of this document for sample usage.
+
+\begin{table}[hp]
+    % table captions go above the table!
     % a short version of the caption goes in [] for use in the list-of-tables
-    \caption[Sample table.]{A sample table with no scientific value.  The caption goes above the table.}
+    \caption[Sample table.]{A table of groundbreaking results.  The caption goes above the table.}
     \label{table:sample}
+
     \begin{center}
         \begin{tabular}{@{}*{4}{l}} % four columns, left justified
-            \toprule
+            \toprule % thick rule at top
             Data-A  & Data-B    & Data-C    & Data-D \\
-            \midrule
+            \midrule % thin rule in middle
             0.5     & 0.5       & 0.5       & 0.5   \\
             0.5     & 0.5       & 0.5       & 0.5   \\
             0.5     & 0.5       & 0.5       & 0.5   \\
@@ -365,21 +378,19 @@ This section gives some examples of how to insert figures and tables.  Note that
             0.5     & 0.5       & 0.5       & 0.5   \\
             \midrule
             Mean    & 0.5       & 0.5       & 0.5   \\
-            \bottomrule
+            \bottomrule % thick rule at bottom
         \end{tabular}
     \end{center}
-\end{table*}
-
-We can reference \tref{table:sample} like this.
+\end{table}
 
 \section{Equations}
 
-Equations are the same as they are in most other \LaTeX{} documents.  For example,
+Your equations should work as expected.  For example,
 \begin{equation}
     \mathbf{z}(t) = \phi(\mathbf{H} \bar{\mathbf{x}}(t) + \mathbf{S} \mathbf{z}(t-1)),
     \label{eq:somefunc}
 \end{equation}
-where $\mathbf{z}(t)$ is the output of some function at time $t$.  We typically refer to equations as something like \eqref{eq:somefunc}.
+where $\mathbf{z}(t)$ is the output of some function at time $t$.  We typically reference equations as \eqref{eq:somefunc}.
 
 \chapter{Creating References and Citations}
 \label{chap:references}
@@ -387,15 +398,45 @@ where $\mathbf{z}(t)$ is the output of some function at time $t$.  We typically 
 
 \section{Citation}
 
+The \textbf{\textbackslash cite} command can be used to reference sources from your bibliography.  For example, this sentence cites a number of articles \cite{forney20112749, cebl, forney2011thesis, forney2015echostate, haykin2009neural}.
+
 \section{Footnotes}
+
+The \textbf{\textbackslash footnote} command can be used to insert footnotes.\footnote{this is a sample footnote.}
 
 \section{Bibliography}
 
-Let's cite a bunch of things \cite{forney20112749, cebl, forney2011thesis, forney2015echostate, haykin2009neural}.
+BibTeX is an excellent tool for managing your bibliography and is used in this example.  See the companion \textit{sample.bib} file for examples of how to place entries in your bibliography.  \LaTeX{} will then automatically generate your Bibliography section.
+
+\textit{thesis.cls} is tested with BibTeX and the standard \textit{unsrt} style of references but, in general, other bibliography packages and styles should work.
 
 \chapter{Formatting Tips and Tricks}
 \label{chap:tips.and.tricks}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Widows and Orphans}
+
+Widows and orphans occur when a single line of text from the beginning or end of a paragraph end up alone at the top or bottom of a page.  Orphans and windows are not allowed in your thesis or dissertation and the graduate school will flag them.  \textit{thesis.cls} sets all possible penalties to attempt to prevent \LaTeX{} from generating orphans and widows.  In some pathological cases, however, they may still occur.  If you find yourself in this position, you have several options:
+
+\begin{enumerate}
+    \item Reword your text.  I know, you shouldn't have to change your text for formatting purposes, but often this is the easiest way.
+
+    \item Change the size of a figure or table or shift things around a bit.
+
+    \item Insert a \textbf{\textbackslash clearpage} command to start the next page directly before the culprit paragraph.
+
+    \item Try tweaking the values of \textbf{\textbackslash clubpenalty} and \textbf{\textbackslash widowpenalty}.  Note, however, that this might cause widows and orphans to spring up elsewhere in your document.
+\end{enumerate}
+
+\section{Margins}
+
+The graduate school is very strict about enforcing 1'' margins.  Before submitting your thesis, try passing the \textbf{showframe} argument to \textit{thesis.cls}.  This will show a frame around each page that will help you troubleshoot your margins.  If you see anything outside this box, be sure to fix it.
+
+Note that figures and tables do not have to be perfectly flush with the margins but cannot violate them.  Note, however, that figures often have an extra margin built in from the program that generated the plot.  These margins can lead to large extra spaces that are occasionally flagged by the graduate school.  Try and remove the margins when you generate your figures.  Alternately, look at tools like inkscape, gimp or photoshop for trimming the margins in your figure files.
+
+\sloppy
+If you have a very long word that flows into the side margin,\footnote{this should generate an ``overfull hbox badness'' warning} you can typically correct the problem by applying the \textbf{\textbackslash sloppy} command to a single paragraph.  This will loosen the \LaTeX{} typesetting rules and allow the margin requirements to be met.  See this paragraph in the source of this document for an example.  Note that you should reverse the effects of sloppy using the \textbf{\textbackslash fussy} command at the end of the paragraph.  Using sloppy rules everywhere will lead to odd-looking spacing.
+\fussy
 
 \backmatter % starts unnumbered supplementary material
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -406,7 +447,7 @@ Let's cite a bunch of things \cite{forney20112749, cebl, forney2011thesis, forne
 % unsorted BibTeX style
 % check here for more:  https://www.sharelatex.com/learn/Bibtex_bibliography_styles
 \bibliographystyle{unsrt}
-\bibliography{sample} % change readme to the name of your .tex file
+\bibliography{sample} % change sample to the name of your .tex file, e.g., thesis
 
 \appendix % starts the appendices
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
