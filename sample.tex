@@ -36,6 +36,7 @@
 % this is derived from the standard book class
 % and supports many of the same features
 \documentclass[master]{thesis}
+%\documentclass[master,showframe]{thesis} % showframe helps troubleshoot margins
 %\documentclass[doctor]{thesis} % for a dissertation
 %\documentclass[bachelor]{thesis} % for an honor's thesis
 
@@ -456,6 +457,8 @@ If you have a very long word that flows into the side margin,\footnote{this shou
 \label{appendix:license}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 { 
+    % this formatting is just for the license,
+    % no need for this in your appendix
     \setlength{\parindent}{0em}
     \setlength{\parskip}{1em}
 
