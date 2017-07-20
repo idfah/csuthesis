@@ -59,15 +59,31 @@
 \newif\ifCLASSOPTIONsubfigure \CLASSOPTIONsubfigurefalse
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
 
-% some default options for the book class
-% note that we assume letter paper and 12pt font
-\PassOptionsToClass{twoside,openany,letterpaper,11pt}{book}
+\newif\ifCLASSOPTIONtenpt
+\newif\ifCLASSOPTIONelevenpt
+\newif\ifCLASSOPTIONtwelvept
+\DeclareOption{10pt}{%
+    \PassOptionsToClass{10pt}{book}
+    \CLASSOPTIONtenpttrue \CLASSOPTIONelevenptfalse \CLASSOPTIONtwelveptfalse
+}
+\DeclareOption{11pt}{%
+    \PassOptionsToClass{11pt}{book}
+    \CLASSOPTIONtenptfalse \CLASSOPTIONelevenpttrue \CLASSOPTIONtwelveptfalse
+}
+\DeclareOption{12pt}{%
+    \PassOptionsToClass{12pt}{book}
+    \CLASSOPTIONtenptfalse \CLASSOPTIONelevenptfalse \CLASSOPTIONtwelvepttrue
+}
+
+% some forced options for the book class
+% note that we require two sided letter paper
+\PassOptionsToClass{twoside,openany,letterpaper}{book}
 
 % pass remaining options to book class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 
 % execute default options
-\ExecuteOptions{master}
+\ExecuteOptions{master,12pt}
 
 % process options
 \ProcessOptions\relax
@@ -103,8 +119,13 @@
 \RequirePackage[doublespacing]{setspace}
 
 % reduce topskip to ensure text is flush with top margin
-% assumes 12pt font
-\topskip=9pt
+% depends on font size
+\topskip=9pt % 12pt
+\ifCLASSOPTIONelevenpt % 11pt
+    \advance \topskip -1pt
+\else\ifCLASSOPTIONtenpt % 10pt
+    \advance \topskip -2pt
+\fi\fi
 
 % provide an environment for creating landscape pages
 % for big tables and figures
@@ -258,12 +279,27 @@
 % Chapter and section headings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% adjust spacing around chapter/section headings
-\def\@abovechap{-36pt}  % above chapter headings
-\def\@belowchap{12pt}  % below chapter headings
-\def\@abovesec{12pt}     % above section headings
-\def\@belowsec{2pt}   % below section headings
+% space above chapter headings depends on font size
+\newlength{\@abovechap}
+\setlength{\@abovechap}{-36pt} % 12pt
+\ifCLASSOPTIONelevenpt % 11pt
+    \advance \@abovechap 4.5pt
+\else\ifCLASSOPTIONtenpt % 10pt
+    \advance \@abovechap 4.5pt
+\fi\fi
+
+% space below chapter headings
+\newlength{\@belowchap}
+\setlength{\@belowchap}{12pt}
+
+% space above section headings
 % note: abovesec does not affect section headings at top of page!
+\newlength{\@abovesec}
+\setlength{\@abovesec}{12pt}
+
+% space below section headings
+\newlength{\@belowsec}
+\setlength{\@belowsec}{2pt}
 
 % font sizes for chapter, section and subsection headings
 \newcommand{\@chapsize}{\LARGE}
@@ -303,13 +339,13 @@
 
 % redefine section commands to change size and spacing
 % could be done with titlesec but that would break margins
-\renewcommand\section{\@startsection {section}{1}{0pt}%
+\renewcommand\section{\@startsection {section}{1}{0em}%
             {\@abovesec}{\@belowsec}{\normalfont\@secsize\bfseries}}
 
-\renewcommand\subsection{\@startsection{subsection}{2}{0pt}%
+\renewcommand\subsection{\@startsection{subsection}{2}{0em}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsecsize\bfseries}}
 
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0em}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsubsecsize\bfseries}}
 
 % Citation and reference formatting
