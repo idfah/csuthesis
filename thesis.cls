@@ -61,7 +61,7 @@
 
 % some default options for the book class
 % note that we assume letter paper and 12pt font
-\PassOptionsToClass{oneside,openany,letterpaper,12pt}{book}
+\PassOptionsToClass{twoside,openany,letterpaper,11pt}{book}
 
 % pass remaining options to book class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
@@ -95,6 +95,9 @@
 \ifCLASSOPTIONshowframe
     \geometry{showframe}
 \fi
+
+% ditch the margin notes space for two sided documents
+\setlength{\marginparwidth}{0ex}
 
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
@@ -188,7 +191,7 @@
 \setlength{\intextsep}{2em}         % with text above and below
 \setlength{\textfloatsep}{2em}      % top/bottom of page with text above/below
 \setlength{\floatsep}{1em}          % between consecutive floats
-\setlength{\@fptop}{0pt}            % top of float only pages
+\setlength{\@fptop}{0em}            % top of float only pages
 \setlength{\@fpsep}{1em}            % between on float only pages
 \setlength{\@fpbot}{0em plus 1fil}  % bottom of float only pages
 
@@ -241,8 +244,8 @@
 \renewcommand{\cftchapfont}{\normalfont}
 
 % don't indent list of figures/tables
-\setlength{\cftfigindent}{0pt}
-\setlength{\cfttabindent}{0pt}
+\setlength{\cftfigindent}{0ex}
+\setlength{\cfttabindent}{0ex}
 
 % create a table-of-contents entry for a new preliminary page
 % we call it an unnumbered section so they aren't spaced and

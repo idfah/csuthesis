@@ -439,6 +439,8 @@ Note that figures and tables do not have to be perfectly flush with the margins 
 If you have a very long word that flows into the side margin,\footnote{this should generate an ``overfull hbox badness'' warning} you can typically correct the problem by applying the \textbf{\textbackslash sloppy} command to a single paragraph.  This will loosen the \LaTeX{} typesetting rules and allow the margin requirements to be met.  See this paragraph in the source of this document for an example.  Note that you should reverse the effects of sloppy using the \textbf{\textbackslash fussy} command at the end of the paragraph.  Using sloppy rules everywhere will lead to odd-looking spacing.
 \fussy
 
+If the sloppy approach does not work for you, consider manually entering a line break using \\\\ after the offending word or equation.
+
 \backmatter % starts unnumbered supplementary material
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
