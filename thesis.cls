@@ -34,7 +34,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/06/13 Colorado State University Thesis]
+\ProvidesClass{thesis}[2017/07/20 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
@@ -283,7 +283,7 @@
 \newlength{\@abovechap}
 \setlength{\@abovechap}{-36pt} % 12pt
 \ifCLASSOPTIONelevenpt % 11pt
-    \advance \@abovechap 4.5pt
+    \advance \@abovechap 1pt
 \else\ifCLASSOPTIONtenpt % 10pt
     \advance \@abovechap 4.5pt
 \fi\fi
@@ -370,31 +370,31 @@
 
 % command to set author's name
 \def\@author{John M. Doe}
-\renewcommand{\author}[1]{\protected@edef\@author{#1}}
+\renewcommand{\author}[1]{\def\@author{#1}}
 
 % command to set author's email
 \def\@email{youremail@colostate.edu}
-\newcommand{\email}[1]{\protected@edef\@email{#1}}
+\newcommand{\email}[1]{\def\@email{#1}}
 
 % command to set department name
 \def\@department{Department of Computer Science}
-\newcommand{\department}[1]{\protected@edef\@department{#1}}
+\newcommand{\department}[1]{\def\@department{#1}}
 
 % command to set defense semester
 \def\@semester{Fall 20\_\_}
-\newcommand{\semester}[1]{\protected@edef\@semester{#1}}
+\newcommand{\semester}[1]{\def\@semester{#1}}
 
 % command to set advisor's name
 \def\@advisor{Advisor's Name}
-\newcommand{\advisor}[1]{\protected@edef\@advisor{#1}}
+\newcommand{\advisor}[1]{\def\@advisor{#1}}
 
 % command to set (optional) co-advisor's name
-\newcommand{\coadvisor}[1]{\protected@edef\@coadvisor{#1}}
+\newcommand{\coadvisor}[1]{\def\@coadvisor{#1}}
 
 % command to add committee members
 % this tacks new members onto current value of \@committee
 \def\@committee{}
-\newcommand{\committee}[1]{\protected@edef\@committee{%
+\newcommand{\committee}[1]{\edef\@committee{%
     \unexpanded\expandafter{\@committee}{\noexpand\hspace{0.25in} #1 \par}}}
 
 % command to make title page
@@ -478,7 +478,7 @@
 \def\@mycopyright{Copyright by \@author \\ All Rights Reserved}
 
 % command to set copyright
-\newcommand{\mycopyright}[1]{\protected@edef\@mycopyright{#1}}
+\newcommand{\mycopyright}[1]{\def\@mycopyright{#1}}
 
 % command to make copyright page
 \newcommand{\makemycopyright}{%
@@ -506,7 +506,7 @@
 \def\@abstract{Abstract goes here.}
 
 % command to set abstract
-\newcommand{\abstract}[1]{\protected@edef\@abstract{#1}}
+\newcommand{\abstract}[1]{\def\@abstract{#1}}
 
 % command to make abstract page
 \newcommand{\makeabstract}{%
@@ -535,7 +535,7 @@
 \def\@acknowledgements{Acknowledgements go here.}
 
 % command to set acknowledgements
-\newcommand{\acknowledgements}[1]{\protected@edef\@acknowledgements{#1}}
+\newcommand{\acknowledgements}[1]{\def\@acknowledgements{#1}}
 
 % acknowledgements page
 \newcommand{\makeacknowledgements}{%
