@@ -66,6 +66,16 @@
 % book tables are simple and look nice
 \usepackage{booktabs}
 
+% define custom commands for creating references
+% for tables, figures, equations and such
+\usepackage{cite}
+\newcommand{\eref}[1]{\eqref{#1}}        % cite equation
+\newcommand{\fref}[1]{Figure~\ref{#1}}   % cite figure
+\newcommand{\cref}[1]{Chapter~\ref{#1}}  % cite chapter
+\newcommand{\sref}[1]{Section~\ref{#1}}  % cite section/sub(sub)section
+\newcommand{\aref}[1]{Appendix~\ref{#1}} % cite appendix
+\newcommand{\tref}[1]{Table~\ref{#1}}    % cite table
+
 % for specifying urls and links
 \usepackage{url}
 \urlstyle{same} % same style as regular text
