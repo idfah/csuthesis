@@ -59,31 +59,15 @@
 \newif\ifCLASSOPTIONsubfigure \CLASSOPTIONsubfigurefalse
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
 
-\newif\ifCLASSOPTIONtenpt
-\newif\ifCLASSOPTIONelevenpt
-\newif\ifCLASSOPTIONtwelvept
-\DeclareOption{10pt}{%
-    \PassOptionsToClass{10pt}{book}
-    \CLASSOPTIONtenpttrue \CLASSOPTIONelevenptfalse \CLASSOPTIONtwelveptfalse
-}
-\DeclareOption{11pt}{%
-    \PassOptionsToClass{11pt}{book}
-    \CLASSOPTIONtenptfalse \CLASSOPTIONelevenpttrue \CLASSOPTIONtwelveptfalse
-}
-\DeclareOption{12pt}{%
-    \PassOptionsToClass{12pt}{book}
-    \CLASSOPTIONtenptfalse \CLASSOPTIONelevenptfalse \CLASSOPTIONtwelvepttrue
-}
-
 % some forced options for the book class
-% note that we require two sided letter paper
-\PassOptionsToClass{twoside,openany,letterpaper}{book}
+% note that we assume letter paper and 12pt font
+\PassOptionsToClass{twoside,openany,letterpaper,12pt}{book}
 
 % pass remaining options to book class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 
 % execute default options
-\ExecuteOptions{master,12pt}
+\ExecuteOptions{master}
 
 % process options
 \ProcessOptions\relax
@@ -95,8 +79,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % use times font by default
-\RequirePackage[T1]{fontenc}
 \RequirePackage{times}
+\RequirePackage[T1]{fontenc}
 
 % Page formatting and layout
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,17 +99,17 @@
 % ditch the margin notes space for two sided documents
 \setlength{\marginparwidth}{0ex}
 
+% prevent addition of blank pages to ensure chapters, etc
+% begin on right sided page
+\let\cleardoublepage\clearpage
+
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
 
 % reduce topskip to ensure text is flush with top margin
-% depends on font size
-\topskip=9pt % 12pt
-\ifCLASSOPTIONelevenpt % 11pt
-    \advance \topskip -1pt
-\else\ifCLASSOPTIONtenpt % 10pt
-    \advance \topskip -2pt
-\fi\fi
+% assumes 12pt font
+\topskip=9pt
+% \advance \topskip \@ptsize pt % add one pt for each pt increase in font size
 
 % provide an environment for creating landscape pages
 % for big tables and figures
@@ -156,10 +140,10 @@
 % bottom or top of page, a.k.a, widows and orphans
 % this configuration should prevent orphans and widows in all
 % but the most pathological cases
-\clubpenalty=10000      % penalty for breaking after first line of a paragraph
-\widowpenalty=10000     % penalty for breaking before last line of a paragraph
-\predisplaypenalty=500  % discourage single line before equations
-\raggedbottom           % be flexible with bottom margin
+\clubpenalty=10000        % penalty for breaking after first line of a paragraph
+\widowpenalty=10000       % penalty for breaking before last line of a paragraph
+\predisplaypenalty=10000  % discourage single line before equations
+\raggedbottom             % be flexible with bottom margin
 
 % indent first paragraphs
 \let\@afterindentfalse\@afterindenttrue
@@ -183,7 +167,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % remove rule above footnote and places further down page
-\RequirePackage[bottom]{footmisc}
+\RequirePackage[hang,flushmargin,bottom]{footmisc}
 
 % space between footnotes if there are multiple on one page
 \setlength{\footnotesep}{1.5em}
@@ -280,22 +264,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % space above chapter headings depends on font size
-\newlength{\@abovechap}
-\setlength{\@abovechap}{-36pt} % 12pt
-\ifCLASSOPTIONelevenpt % 11pt
-    \advance \@abovechap 1pt
-\else\ifCLASSOPTIONtenpt % 10pt
-    \advance \@abovechap 4.5pt
-\fi\fi
+\def\@abovechap{-36pt}
 
 % space below chapter headings
-\newlength{\@belowchap}
-\setlength{\@belowchap}{12pt}
+\def\@belowchap{12pt}
 
 % space above section headings
-% note: abovesec does not affect section headings at top of page!
-\newlength{\@abovesec}
-\setlength{\@abovesec}{12pt}
+% note: abovesec does not affect section headings at top of page
+\def\@abovesec{12pt}
 
 % space below section headings
 \newlength{\@belowsec}
@@ -619,10 +595,6 @@
 
 % \frontmatter \mainmatter \backmatter and \appendix commands come from the book class
 
-% hack to allow appendix after the bibliography by resetting to mainmatter
-% yuck but the guidelines insist the appendix comes after bibliography
-\g@addto@macro\appendix\@mainmattertrue
-
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -655,3 +627,10 @@
     {\@latex@warning{Empty `thebibliography' environment}}%
 \endlist}
 % end modified from book.cls
+
+% Appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% hack to allow appendix after the bibliography by resetting to mainmatter
+% yuck but the guidelines insist the appendix comes after bibliography
+\g@addto@macro\appendix\@mainmattertrue
