@@ -34,7 +34,7 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/07/20 Colorado State University Thesis]
+\ProvidesClass{thesis}[2018/04/19 Colorado State University Thesis]
 
 % provide classoption to specify if this is an bachelor, master or
 % doctor thesis/dissertation
