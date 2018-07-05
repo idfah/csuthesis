@@ -368,7 +368,7 @@
                 THESIS
             \fi
 
-            \vspace{0.25in}
+            \vspace{3em}
 
             % title in all caps
             {\MakeUppercase{\@title} \par}
