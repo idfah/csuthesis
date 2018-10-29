@@ -1,0 +1,104 @@
+\documentclass{beamer} % comment this line out before building notes file
+\usepackage{amsmath,amsthm,amssymb}   % make math look better
+% \usepackage{algorithm, algpseudocode} % allows pseudo-code blocks
+\usepackage[caption=false]{subfig} % allows side-by-side figures
+\usepackage[font=scriptsize,labelfont=bf]{caption} % fixes captions with beamer's weirdness
+% \usepackage{listings} % for listing code blocks
+% \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+\usepackage{booktabs} % book tables are simple and look nice
+\usepackage{xcolor}   % for template colors
+\usepackage{graphicx} % for images, etc.
+
+% Change template colors to CSU colors, notation is {color!%opacity}
+\definecolor{CSUgreen}{RGB}{30,77,43}   % define green
+\definecolor{CSUtan}{RGB}{215,211,146}  % define tan
+\setbeamercolor{structure}{fg=CSUgreen} % 'structure' handles most of the colors
+% \setbeamercolor{background canvas}{bg=CSUtan!18} % set background color
+\setbeamercolor{palette sidebar secondary}{fg=CSUgreen} % highlighted section
+\setbeamercolor{section in sidebar shaded}{fg=CSUgreen!70} % faded sections
+\setbeamercolor{block title}{bg=CSUgreen!40,fg=CSUgreen}
+\setbeamercolor{block body}{bg=CSUgreen!20}
+\setbeamercolor{block title example}{bg=CSUtan!70,fg=CSUgreen}
+\setbeamercolor{block body example}{bg=CSUtan!50}
+\usetheme{Goettingen}
+\makeatletter % allows you to edit macros of theme
+\setbeamertemplate{sidebar canvas \beamer@sidebarside}[vertical shading][top=CSUgreen!50,bottom=CSUgreen!30]
+\makeatother
+
+\setbeamertemplate{caption}{\insertcaption}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}         % get a straight d for differential in integrals
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert} % absolute value
+\makeatletter                                   % Hack the \vdots command to take up less space
+\DeclareRobustCommand{\svdots}{%
+  \vbox{
+    \baselineskip4\p@\lineskiplimit\z@
+    \kern-\p@
+    \hbox{.}\hbox{.}\hbox{.}
+  }}
+
+% \setcounter{MaxMatrixCols}{20} % allow more table entries to display
+\makeatother
+\graphicspath{{../../figures/}} % Set path for graphics
+
+%-------------------------------------------------------------------------------
+%	TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\title[Short Title]{Full Title}
+\author[Short Name]{Full Name \\ \vspace{.2cm}
+{\scriptsize Colorado State University\\
+email@colostate.edu}
+}
+
+\institute[CSU]
+{\begin{tabular}{r@{}l}
+Advisor:   \  & Advisor \\
+Committee: \  & Committee Member 1 \\
+              & Committee Member 2 \\
+              & Committee Member 3
+\end{tabular}
+}
+\date{Date}
+
+\begin{document}
+
+\begin{frame}
+% \nocite{*} % Prints all references in bibliography
+\titlepage % Print the title page as the first slide
+\end{frame}
+%=============================================================================
+% These notes will build as a separate file. Every slide needs one, even if it's blank.
+\note[itemize]{
+\item Thank everyone for coming. Thank committee.
+
+\item Good luck! :)
+}
+
+%-------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%-------------------------------------------------------------------------------
+\section{First Section}
+\subsection{First Subsection}
+
+\begin{frame}
+  \frametitle{Generic Slide}
+    \begin{figure}
+    % \includegraphics[scale=.35]{cartoon.jpg}
+    \caption{Caption.}
+  \end{figure}
+\end{frame}
+%=============================================================================
+\note{ Notes. }
+
+\section{References}
+
+\begin{frame}[allowframebreaks] % references flow onto multiple slides
+\frametitle{References}
+
+\bibliographystyle{siam}
+% {\footnotesize \bibliography{../../Bibliography.bib}}
+\end{frame}
+\note{The End.}
+
+\end{document}
