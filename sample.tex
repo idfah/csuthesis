@@ -54,17 +54,11 @@
 
 % graphics packages
 \usepackage[pdftex]{graphicx} % remove pdftex if you are not compiling to pdf
-\graphicspath{{./figures/}{../figures/}} % this places all graphics in the figures subdirectory
+\graphicspath{{./figures/}} % this places all graphics in the figures subdirectory
 
 % allowed graphics extensions
 % uncomment if you prefer to add extension in \includegraphics
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
-
-% allows the document to be broken into subfiles and compiled individually
-% note that if you place the subfiles in a separate directory, you need to place
-% a copy of thesis.cls in that directory. There should be a way to fix this, but
-% I was forced to move on before figuring it out.
-\usepackage{subfiles}
 
 % allows the creation of subfigures
 \usepackage[caption=false]{subfig}
@@ -210,8 +204,14 @@ I would like to thank the CSU Graduate Student Council and the CSU Graduate Scho
 \chapter[Introduction]{Introduction\footnote{Here is an example of a citation in a chapter heading.}}
 \label{chap:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subfile{./subfiles/introduction.tex} % Here is an example of including a chapter as a subfile.
-%You can now edit and compile introduction.tex independently, saving some compile and scrolling time for large documents.
+
+Thank you for downloading the Colorado State University (CSU) \LaTeX{} document class and template for theses and dissertations.  The goal of this document is to get users of the \LaTeX{} typesetting systems started on their thesis. Users of other typesetting or word processing systems, e.g., MS Word or LibreOffice, will likely not find this package useful.  This document serves both as a guide for using this package and as a sample template to get you started.  Please review the entire document for useful information on typesetting your thesis or dissertation.  After reading over this guide, copy \textit{sample.tex} to something like \textit{thesis.tex} and \textit{sample.bib} to \textit{sample.bib} and begin inserting your own content.\footnote{Don't forget to change the \textit{bibliography} command to reference \textit{thesis.bib}}
+
+This package was created with the support of the CSU Graduate Student Council and the CSU Graduate School.  These entities are not, however, able to provide troubleshooting support for \LaTeX{}.  Instead, it is intended that this document will be supported by its community of users and by the students themselves, that's you!  You may want to consider locating other \LaTeX{} users in your department or college.  Also, Google and the \LaTeX{} Stack Exchange are excellent resources for troubleshooting.
+
+This document is currently hosted on GitHub at \url{https://github.com/idfah/csuthesis}.  If you run into any bugs, shortcomings or other problems with this package, please feel free to submit a bug report.  If you are able to provide a fix yourself, pull requests are very much appreciated.  \cref{chap:tips.and.tricks} of this document also provides solutions to some common problems that you may encounter when typesetting your thesis in LaTeX.  Please look this section first when trying to troubleshoot a problem.  If this section does not address your problem and you later discover a solution, please submit a pull request on GitHub that includes a description of your problem and the solution.  This will help others who encounter the same problem in the future.
+
+This package is free software and your are permitted to use, modify and distribute this software as you like.  Please read \aref{appendix:license}, the file \textit{LICENSE} or the source code headers for a full copy of the license.
 
 \chapter{The Thesis Document Class}
 \label{chap:thesiscls}
