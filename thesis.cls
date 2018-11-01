@@ -309,19 +309,6 @@
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsubsecsize\bfseries}}
 
-% Citation and reference formatting
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% define custom commands for creating references
-% for tables, figures, equations and such
-\RequirePackage{cite}
-\newcommand{\eref}[1]{\eqref{#1}}        % cite equation
-\newcommand{\fref}[1]{Figure~\ref{#1}}   % cite figure
-\newcommand{\cref}[1]{Chapter~\ref{#1}}  % cite chapter
-\newcommand{\sref}[1]{Section~\ref{#1}}  % cite section/sub(sub)section
-\newcommand{\aref}[1]{Appendix~\ref{#1}} % cite appendix
-\newcommand{\tref}[1]{Table~\ref{#1}}    % cite table
-
 % Title Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
