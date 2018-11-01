@@ -1,0 +1,87 @@
+% \documentclass{beamer}    % comment this line out before building notes file
+
+% Dependencies
+\usepackage{amsmath,amsthm,amssymb}                 % nice-looking math
+\usepackage[caption=false]{subfig}                  % allows side-by-side figures
+\usepackage[font=scriptsize,labelfont=bf]{caption}  % options to make captions looks nice
+\usepackage{booktabs}                               % book tables are simple and look nice
+\usepackage{xcolor}                                 % for template colors
+\usepackage{graphicx}                               % for images, etc.
+
+% Change template colors to CSU colors, notation is {color!%opacity}
+\definecolor{CSUgreen}{RGB}{30,77,43}   % define green
+\definecolor{CSUtan}{RGB}{215,211,146}  % define tan
+\setbeamercolor{structure}{fg=CSUgreen} % 'structure' handles most of the colors
+\setbeamercolor{palette sidebar secondary}{fg=CSUgreen}     % highlighted section heading
+\setbeamercolor{section in sidebar shaded}{fg=CSUgreen!70}  % faded section headings
+\setbeamercolor{block title}{bg=CSUgreen!40,fg=CSUgreen}
+\setbeamercolor{block body}{bg=CSUgreen!20}
+\setbeamercolor{block title example}{bg=CSUtan!70,fg=CSUgreen}
+\setbeamercolor{block body example}{bg=CSUtan!50}
+
+% Set Beamer theme and modify
+\usetheme{Goettingen}
+\makeatletter % allows you to edit macros of theme
+\setbeamertemplate{sidebar canvas \beamer@sidebarside}[vertical shading][top=CSUgreen!50,bottom=CSUgreen!30]
+\setbeamertemplate{caption}{\insertcaption}
+
+\graphicspath{{../figures/}} % Set path for graphics
+
+%-------------------------------------------------------------------------------
+%	TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\title[Short Title]{Full Title}
+\author[Short Name]{Full Name \\ \vspace{.2cm}
+{\scriptsize Colorado State University\\
+email@colostate.edu}
+}
+
+\institute[CSU]
+{\begin{tabular}{r@{}l}
+Advisor:   \  & Advisor \\
+Committee: \  & Committee Member 1 \\
+              & Committee Member 2 \\
+              & Committee Member 3
+\end{tabular}
+}
+\date{Date}
+
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+%=============================================================================
+% These notes will build as a separate file. Every slide needs one, even if it's blank.
+\note[itemize]{
+\item Thank everyone for coming. Thank committee.
+}
+
+%-------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%-------------------------------------------------------------------------------
+\section{First Section}
+\subsection{First Subsection}
+
+\begin{frame}
+  \frametitle{Generic Slide}
+    \begin{figure}
+    % \includegraphics[scale=.35]{cartoon.jpg}
+    \caption{Caption.}
+  \end{figure}
+\end{frame}
+%=============================================================================
+\note{ Notes. }
+
+\section{References}
+
+\begin{frame}[allowframebreaks] % references flow onto multiple slides
+\frametitle{References}
+
+\bibliographystyle{siam}
+% {\footnotesize \bibliography{../../Bibliography.bib}}
+\end{frame}
+\note{The End.}
+
+\end{document}
