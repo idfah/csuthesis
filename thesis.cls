@@ -168,7 +168,6 @@
 \def\footnoterule{\hrule \@width 2in}
 
 % prevents footnote counter from resetting at new chapter
-\RequirePackage{remreset}
 \@removefromreset{footnote}{chapter}
 
 % Page numbers
