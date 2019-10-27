@@ -176,7 +176,6 @@
 \def\footnoterule{\hrule \@width 2in}
 
 % prevents footnote counter from resetting at new chapter
-\RequirePackage{remreset}
 \@removefromreset{footnote}{chapter}
 
 % Page numbers
@@ -370,7 +369,7 @@
                 THESIS
             \fi
 
-            \vspace{0.25in}
+            \vspace{3em}
 
             % title in all caps
             {\MakeUppercase{\@title} \par}

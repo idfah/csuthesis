@@ -80,6 +80,19 @@
 \usepackage{url}
 \urlstyle{same} % same style as regular text
 
+% citation and reference formatting
+%\usepackage{apacite} % apa style citations, also change bibliographystyle below
+\usepackage{cite} % math and engineering style citations
+
+% define custom commands for creating references
+% for tables, figures, equations and such
+\newcommand{\eref}[1]{\eqref{#1}}        % cite equation
+\newcommand{\fref}[1]{Figure~\ref{#1}}   % cite figure
+\newcommand{\cref}[1]{Chapter~\ref{#1}}  % cite chapter
+\newcommand{\sref}[1]{Section~\ref{#1}}  % cite section/sub(sub)section
+\newcommand{\aref}[1]{Appendix~\ref{#1}} % cite appendix
+\newcommand{\tref}[1]{Table~\ref{#1}}    % cite table
+
 % Title Page
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -160,8 +173,8 @@ I would like to thank the CSU Graduate Student Council and the CSU Graduate Scho
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % consider using hyperref to insert pdf metadata and make links clickable
-% safe to remove if not using pdf or if it causes problems
-\usepackage[pdfpagelabels,pdfusetitle,colorlinks=false,pdfborder={0 0 0}]{hyperref}
+% this is nice but can cause tricky problems, use at your own risk
+%\usepackage[pdfpagelabels,pdfusetitle,colorlinks=false,pdfborder={0 0 0}]{hyperref}
 
 \begin{document} % preamble is complete, add any custom packages above
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -230,8 +243,6 @@ You will need to have several \LaTeX{} packages installed in order for \textit{t
     \item \textbf{fontenc} and \textbf{times}  These packages are required for setting up the default \textit{times} font.  Note that you may use a different font, if you choose, by loading the corresponding package after loading the document class.
 
     \item \textbf{footmisc}  This package is required for setting up footnotes.
-
-    \item \textbf{remreset}  This package is required for preventing the footnote numbering from resetting after each chapter.
 
     \item \textbf{caption}  This package is required for formatting captions around figures and tables.
 
@@ -409,7 +420,7 @@ where $\mathbf{z}(t)$ is the output of some function at time $t$.  We typically 
 
 \section{Citation}
 
-The \textbf{\textbackslash cite} command can be used to reference sources from your bibliography.  For example, this sentence cites a number of articles \cite{forney20112749, cebl, forney2011thesis, forney2015echostate, haykin2009neural}.
+The \textbf{\textbackslash cite} command can be used to reference sources from your bibliography.  For example, this sentence cites a number of articles \cite{forney2011classify, cebl, forney2011thesis, forney2015echostate, haykin2009neural}.
 
 \section{Footnotes}
 
@@ -459,7 +470,9 @@ If the sloppy approach does not work for you, consider manually entering a line 
 
 % unsorted BibTeX style
 % check here for more:  https://www.sharelatex.com/learn/Bibtex_bibliography_styles
-\bibliographystyle{unsrt}
+%\bibliographystyle{apacite} % apa style bibliography
+\bibliographystyle{unsrt} % math and engineering style bibliography
+
 \bibliography{sample} % change sample to the name of your .tex file, e.g., thesis
 
 \appendix % starts the appendices
