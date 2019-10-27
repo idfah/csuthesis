@@ -34,10 +34,9 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2018/04/19 Colorado State University Thesis]
+\ProvidesClass{thesis}[2019/10/26 Colorado State University Thesis]
 
-% provide classoption to specify if this is an bachelor, master or
-% doctor thesis/dissertation
+% provide classoption to specify if this is an bachelor, master or doctor thesis/dissertation
 \newif\ifCLASSOPTIONbachelor
 \newif\ifCLASSOPTIONmaster
 \newif\ifCLASSOPTIONdoctor
@@ -54,8 +53,8 @@
 \DeclareOption{nopdf}{\CLASSOPTIONpdffalse}
 
 % provide classoption for subfigure compatibility
-% note that the subfig package should generally be used instead
-% of subfigure, so this option shouldn't be necessary unless you insist
+% note that the subfig package should generally be used instead of
+% subfigure, so this option shouldn't be necessary unless you insist
 \newif\ifCLASSOPTIONsubfigure \CLASSOPTIONsubfigurefalse
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
 
@@ -106,32 +105,42 @@
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
 
-% reduce topskip to ensure text is flush with top margin
-% assumes 12pt font
+% reduce topskip to ensure text is flush with top margin assumes 12pt font
 \topskip=9pt
 % \advance \topskip \@ptsize pt % add one pt for each pt increase in font size
 
-% provide an environment for creating landscape pages
-% for big tables and figures
-% this is kind of a hack for now but gets the job done
-% any ideas for a better solution?
+% provide an environment for creating landscape pages for big tables and figures
+% this is kind of a hack but gets the job done, only works for PDFs, YMMV
 \ifCLASSOPTIONpdf
+    % we need pdflscape to rotate the page
     \RequirePackage{pdflscape}
-\else
-    \RequirePackage{lscape}
+
+    % we use afterpage and environ to make sure that
+    % text flows normally around the landscape page
+    \RequirePackage{afterpage}
+    \RequirePackage{environ}
+
+    % sets up the body of the landscape page with
+    \def\@lscapepagebody#1{%
+        \afterpage{%
+            \newgeometry{lmargin=1in, rmargin=1in,
+                         tmargin=1in, bmargin=1in}%
+            \begin{landscape}%
+                \thispagestyle{empty}%
+                #1%
+                \null%
+                \vfill%
+                \centerline{\normalsize\thepage}%
+            \end{landscape}%
+            \restoregeometry%
+        }%
+    }
+
+    % new sidewayspage environment placed after current page
+    \NewEnviron{sidewayspage}{%
+        \expandafter\@lscapepagebody\expandafter{\BODY}%
+    }
 \fi
-\newenvironment{sidewayspage}{%
-    \newgeometry{lmargin=1in, rmargin=0.45in,
-                 tmargin=1in, bmargin=1in}%
-    \begin{landscape}%
-        \thispagestyle{empty}%
-}{%
-        \null%
-        \vfill%
-        \centerline{\normalsize\thepage}%
-    \end{landscape}%
-    \restoregeometry%
-}
 
 % Typesetting rules
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,7 +176,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % remove rule above footnote and places further down page
-\RequirePackage[hang,flushmargin,bottom]{footmisc}
+% add commas between successive footnote superscripts
+\RequirePackage[hang,multiple,flushmargin,bottom]{footmisc}
 
 % space between footnotes if there are multiple on one page
 \setlength{\footnotesep}{1.5em}
@@ -187,8 +197,7 @@
 % Float (figures, tables, etc) formatting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% hook to add \centering to all float environments,
-% e.g, tables and figures
+% hook to add \centering to all float environments, e.g, tables and figures
 \g@addto@macro\@floatboxreset\centering
 
 % adjust spacing above and below floats
@@ -256,7 +265,7 @@
 % reverse the indent using hspace then make uppercase
 \newcommand{\prelimtocentry}[1]{%
     \phantomsection%
-    \addcontentsline{toc}{section}{\hspace{-\cftsecindent}\uppercase{#1}}%
+    \addcontentsline{toc}{section}{\hspace{-\cftsecindent}{\uppercase{#1}}}%
 }
 
 % Chapter and section headings
@@ -369,7 +378,7 @@
                 THESIS
             \fi
 
-            \vspace{3em}
+            \vspace{0.25in}
 
             % title in all caps
             {\MakeUppercase{\@title} \par}
@@ -606,7 +615,7 @@
           \usecounter{enumiv}%
           \let\p@enumiv\@empty
           \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-    \sloppy % :revents hbox overfull but looks nicer without it
+    \sloppy\hbadness 10000\relax % prevents hbox overfull but looks nicer without it
     \sfcode`\.\@m%
 }
 {\def\@noitemerr
