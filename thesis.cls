@@ -241,9 +241,9 @@
 
 % appendix name in toc is "Appendix A"
 \g@addto@macro\appendix{%
-  \addtocontents{toc}{%
-    \protect\renewcommand{\protect\cftchappresnum}{\appendixname\space}%
-  }%
+    \addtocontents{toc}{%
+        \protect\renewcommand{\protect\cftchappresnum}{\appendixname\space}%
+    }%
 }
 
 % dots same for chapters and sections
@@ -417,13 +417,13 @@
 
     {\singlespace \zeroindent
         \ifCLASSOPTIONbachelor
-          Committee:
+            Committee:
         \fi
         \ifCLASSOPTIONmaster
-          Master's Committee:
+            Master's Committee:
         \fi
         \ifCLASSOPTIONdoctor
-          Doctoral Committee:
+            Doctoral Committee:
         \fi
 
         \vspace{1em}
