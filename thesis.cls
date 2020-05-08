@@ -3,7 +3,7 @@
 %
 % by
 %   Elliott Forney
-%   2017
+%   2017--2020
 %
 % This is free and unencumbered software released into the public domain.
 % 
@@ -34,10 +34,9 @@
 
 % provide a new LaTeX2e document class
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{thesis}[2017/06/13 Colorado State University Thesis]
+\ProvidesClass{thesis}[2020/05/07 Colorado State University Thesis]
 
-% provide classoption to specify if this is an bachelor, master or
-% doctor thesis/dissertation
+% provide classoption to specify if this is an bachelor, master or doctor thesis/dissertation
 \newif\ifCLASSOPTIONbachelor
 \newif\ifCLASSOPTIONmaster
 \newif\ifCLASSOPTIONdoctor
@@ -54,14 +53,14 @@
 \DeclareOption{nopdf}{\CLASSOPTIONpdffalse}
 
 % provide classoption for subfigure compatibility
-% note that the subfig package should generally be used instead
-% of subfigure, so this option shouldn't be necessary unless you insist
+% note that the subfig package should generally be used instead of
+% subfigure, so this option shouldn't be necessary unless you insist
 \newif\ifCLASSOPTIONsubfigure \CLASSOPTIONsubfigurefalse
 \DeclareOption{subfigure}{\CLASSOPTIONsubfiguretrue}
 
-% some default options for the book class
+% some forced options for the book class
 % note that we assume letter paper and 12pt font
-\PassOptionsToClass{oneside,openany,letterpaper,12pt}{book}
+\PassOptionsToClass{twoside,openany,letterpaper,12pt}{book}
 
 % pass remaining options to book class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
@@ -79,8 +78,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % use times font by default
-\RequirePackage[T1]{fontenc}
 \RequirePackage{times}
+\RequirePackage[T1]{fontenc}
 
 % Page formatting and layout
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -96,34 +95,52 @@
     \geometry{showframe}
 \fi
 
+% ditch the margin notes space for two sided documents
+\setlength{\marginparwidth}{0ex}
+
+% prevent addition of blank pages to ensure chapters, etc
+% begin on right sided page
+\let\cleardoublepage\clearpage
+
 % use double spacing by default
 \RequirePackage[doublespacing]{setspace}
 
-% reduce topskip to ensure text is flush with top margin
-% assumes 12pt font
+% reduce topskip to ensure text is flush with top margin assumes 12pt font
 \topskip=9pt
+% \advance \topskip \@ptsize pt % add one pt for each pt increase in font size
 
-% provide an environment for creating landscape pages
-% for big tables and figures
-% this is kind of a hack for now but gets the job done
-% any ideas for a better solution?
+% provide an environment for creating landscape pages for big tables and figures
+% this is kind of a hack but gets the job done, only works for PDFs, YMMV
 \ifCLASSOPTIONpdf
+    % we need pdflscape to rotate the page
     \RequirePackage{pdflscape}
-\else
-    \RequirePackage{lscape}
+
+    % we use afterpage and environ to make sure that
+    % text flows normally around the landscape page
+    \RequirePackage{afterpage}
+    \RequirePackage{environ}
+
+    % sets up the body of the landscape page with
+    \def\@lscapepagebody#1{%
+        \afterpage{%
+            \newgeometry{lmargin=0.5in, rmargin=1in,
+                         tmargin=1in, bmargin=1in}%
+            \begin{landscape}%
+                \thispagestyle{empty}%
+                #1%
+                \null%
+                \vfill%
+                \centerline{\normalsize\thepage}%
+            \end{landscape}%
+            \restoregeometry%
+        }%
+    }
+
+    % new sidewayspage environment placed after current page
+    \NewEnviron{sidewayspage}{%
+        \expandafter\@lscapepagebody\expandafter{\BODY}%
+    }
 \fi
-\newenvironment{sidewayspage}{%
-    \newgeometry{lmargin=1in, rmargin=0.45in,
-                 tmargin=1in, bmargin=1in}%
-    \begin{landscape}%
-        \thispagestyle{empty}%
-}{%
-        \null%
-        \vfill%
-        \centerline{\normalsize\thepage}%
-    \end{landscape}%
-    \restoregeometry%
-}
 
 % Typesetting rules
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,10 +149,10 @@
 % bottom or top of page, a.k.a, widows and orphans
 % this configuration should prevent orphans and widows in all
 % but the most pathological cases
-\clubpenalty=10000      % penalty for breaking after first line of a paragraph
-\widowpenalty=10000     % penalty for breaking before last line of a paragraph
-\predisplaypenalty=500  % discourage single line before equations
-\raggedbottom           % be flexible with bottom margin
+\clubpenalty=10000        % penalty for breaking after first line of a paragraph
+\widowpenalty=10000       % penalty for breaking before last line of a paragraph
+\predisplaypenalty=10000  % discourage single line before equations
+\raggedbottom             % be flexible with bottom margin
 
 % indent first paragraphs
 \let\@afterindentfalse\@afterindenttrue
@@ -159,7 +176,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % remove rule above footnote and places further down page
-\RequirePackage[bottom]{footmisc}
+% add commas between successive footnote superscripts
+\RequirePackage[hang,multiple,flushmargin,bottom]{footmisc}
 
 % space between footnotes if there are multiple on one page
 \setlength{\footnotesep}{1.5em}
@@ -179,15 +197,14 @@
 % Float (figures, tables, etc) formatting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% hook to add \centering to all float environments,
-% e.g, tables and figures
+% hook to add \centering to all float environments, e.g, tables and figures
 \g@addto@macro\@floatboxreset\centering
 
 % adjust spacing above and below floats
 \setlength{\intextsep}{2em}         % with text above and below
 \setlength{\textfloatsep}{2em}      % top/bottom of page with text above/below
 \setlength{\floatsep}{1em}          % between consecutive floats
-\setlength{\@fptop}{0pt}            % top of float only pages
+\setlength{\@fptop}{0em}            % top of float only pages
 \setlength{\@fpsep}{1em}            % between on float only pages
 \setlength{\@fpbot}{0em plus 1fil}  % bottom of float only pages
 
@@ -240,26 +257,34 @@
 \renewcommand{\cftchapfont}{\normalfont}
 
 % don't indent list of figures/tables
-\setlength{\cftfigindent}{0pt}
-\setlength{\cfttabindent}{0pt}
+\setlength{\cftfigindent}{0ex}
+\setlength{\cfttabindent}{0ex}
 
 % create a table-of-contents entry for a new preliminary page
 % we call it an unnumbered section so they aren't spaced and
 % reverse the indent using hspace then make uppercase
 \newcommand{\prelimtocentry}[1]{%
     \phantomsection%
-    \addcontentsline{toc}{section}{\hspace{-\cftsecindent}\uppercase{#1}}%
+    %\addcontentsline{toc}{section}{\hspace{-\cftsecindent}{\texorpdfstring{\uppercase{#1}}{#1}}}%
+    \addcontentsline{toc}{section}{\hspace{-\cftsecindent}{\uppercase{#1}}}%
 }
 
 % Chapter and section headings
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% adjust spacing around chapter/section headings
-\def\@abovechap{-36pt}  % above chapter headings
-\def\@belowchap{12pt}  % below chapter headings
-\def\@abovesec{12pt}     % above section headings
-\def\@belowsec{2pt}   % below section headings
-% note: abovesec does not affect section headings at top of page!
+% space above chapter headings depends on font size
+\def\@abovechap{-36pt}
+
+% space below chapter headings
+\def\@belowchap{12pt}
+
+% space above section headings
+% note: abovesec does not affect section headings at top of page
+\def\@abovesec{12pt}
+
+% space below section headings
+\newlength{\@belowsec}
+\setlength{\@belowsec}{2pt}
 
 % font sizes for chapter, section and subsection headings
 \newcommand{\@chapsize}{\LARGE}
@@ -299,13 +324,13 @@
 
 % redefine section commands to change size and spacing
 % could be done with titlesec but that would break margins
-\renewcommand\section{\@startsection {section}{1}{0pt}%
+\renewcommand\section{\@startsection {section}{1}{0em}%
             {\@abovesec}{\@belowsec}{\normalfont\@secsize\bfseries}}
 
-\renewcommand\subsection{\@startsection{subsection}{2}{0pt}%
+\renewcommand\subsection{\@startsection{subsection}{2}{0em}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsecsize\bfseries}}
 
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}%
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0em}%
             {\@abovesec}{\@belowsec}{\normalfont\@subsubsecsize\bfseries}}
 
 % Title Page
@@ -317,31 +342,31 @@
 
 % command to set author's name
 \def\@author{John M. Doe}
-\renewcommand{\author}[1]{\protected@edef\@author{#1}}
+\renewcommand{\author}[1]{\def\@author{#1}}
 
 % command to set author's email
 \def\@email{youremail@colostate.edu}
-\newcommand{\email}[1]{\protected@edef\@email{#1}}
+\newcommand{\email}[1]{\def\@email{#1}}
 
 % command to set department name
 \def\@department{Department of Computer Science}
-\newcommand{\department}[1]{\protected@edef\@department{#1}}
+\newcommand{\department}[1]{\def\@department{#1}}
 
 % command to set defense semester
 \def\@semester{Fall 20\_\_}
-\newcommand{\semester}[1]{\protected@edef\@semester{#1}}
+\newcommand{\semester}[1]{\def\@semester{#1}}
 
 % command to set advisor's name
 \def\@advisor{Advisor's Name}
-\newcommand{\advisor}[1]{\protected@edef\@advisor{#1}}
+\newcommand{\advisor}[1]{\def\@advisor{#1}}
 
 % command to set (optional) co-advisor's name
-\newcommand{\coadvisor}[1]{\protected@edef\@coadvisor{#1}}
+\newcommand{\coadvisor}[1]{\def\@coadvisor{#1}}
 
 % command to add committee members
 % this tacks new members onto current value of \@committee
 \def\@committee{}
-\newcommand{\committee}[1]{\protected@edef\@committee{%
+\newcommand{\committee}[1]{\edef\@committee{%
     \unexpanded\expandafter{\@committee}{\noexpand\hspace{0.25in} #1 \par}}}
 
 % command to make title page
@@ -425,7 +450,7 @@
 \def\@mycopyright{Copyright by \@author \\ All Rights Reserved}
 
 % command to set copyright
-\newcommand{\mycopyright}[1]{\protected@edef\@mycopyright{#1}}
+\newcommand{\mycopyright}[1]{\def\@mycopyright{#1}}
 
 % command to make copyright page
 \newcommand{\makemycopyright}{%
@@ -453,7 +478,7 @@
 \def\@abstract{Abstract goes here.}
 
 % command to set abstract
-\newcommand{\abstract}[1]{\protected@edef\@abstract{#1}}
+\newcommand{\abstract}[1]{\def\@abstract{#1}}
 
 % command to make abstract page
 \newcommand{\makeabstract}{%
@@ -482,7 +507,7 @@
 \def\@acknowledgements{Acknowledgements go here.}
 
 % command to set acknowledgements
-\newcommand{\acknowledgements}[1]{\protected@edef\@acknowledgements{#1}}
+\newcommand{\acknowledgements}[1]{\def\@acknowledgements{#1}}
 
 % acknowledgements page
 \newcommand{\makeacknowledgements}{%
@@ -566,10 +591,6 @@
 
 % \frontmatter \mainmatter \backmatter and \appendix commands come from the book class
 
-% hack to allow appendix after the bibliography by resetting to mainmatter
-% yuck but the guidelines insist the appendix comes after bibliography
-\g@addto@macro\appendix\@mainmattertrue
-
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -595,10 +616,17 @@
           \usecounter{enumiv}%
           \let\p@enumiv\@empty
           \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-    \sloppy % :revents hbox overfull but looks nicer without it
+    \sloppy\hbadness 10000\relax % prevents hbox overfull but looks nicer without it
     \sfcode`\.\@m%
 }
 {\def\@noitemerr
     {\@latex@warning{Empty `thebibliography' environment}}%
 \endlist}
 % end modified from book.cls
+
+% Appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% hack to allow appendix after the bibliography by resetting to mainmatter
+% yuck but the guidelines insist the appendix comes after bibliography
+\g@addto@macro\appendix\@mainmattertrue
