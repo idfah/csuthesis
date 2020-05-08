@@ -23,7 +23,7 @@ I would like to thank [the CSU Graduate Student Council](https://sites.google.co
 
 [Colorado State University LaTeX Thesis Template](https://github.com/idfah/csuthesis)
 
-by [Elliott Forney](http://www.elliottforney.com) - 2017
+by [Elliott Forney](http://www.elliottforney.com) - 2017--2020
 
 This is free and unencumbered software released into the public domain.
 
